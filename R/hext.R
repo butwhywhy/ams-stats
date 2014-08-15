@@ -9,6 +9,17 @@
 #' @param alpha Number between 0 and 1. Confidence level.
 #'
 #' @export
+#' @examples
+#' # Sample AMS measures object
+#' measures <- as.ams.measures(sample_measures)
+#'
+#' # Experimental setup object
+#' setup <- ams.setup()
+#' 
+#' # Estimate AMS parameters and confidence intervals with 0.99 confidence 
+#' # level
+#' ams.hext(measures, setup, alpha = 0.99)
+#'
 ams.hext <- function(measures, setup, alpha=0.95){
 
     param <- .__hext_param(measures,setup)
@@ -27,7 +38,7 @@ ams.hext <- function(measures, setup, alpha=0.95){
 
    #data <- tausError$taus
    #
-   stats <-.__statHext(tausError$taus_means, param$eig_param, param$V, param$varianza, param$xb, nrow(measures), alpha)
+   stats <- .__statHext(tausError$taus_means, param$eig_param, param$V, param$varianza, param$xb, nrow(measures), alpha)
 
    return(ams.analysis(tausError, ellipses, stats))
    #return(list(taus_means=tausError$taus_means,

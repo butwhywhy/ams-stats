@@ -8,8 +8,9 @@
 
 #' Analyse AMS data using Bootstrap method proposed by Hext.
 #'
-#' This function takes a frame with n measurements and returns the means 
-#' eigenvalues and their errors and the means eigenvectors with their errors.
+#' This function takes a \code{ams.measures} object and returns the estimated 
+#' eigenvalues and their errors and the estimated eigenvectors with 
+#' their errors.
 #' 
 #' @param measures Object with class \code{ams.measures}.
 #' @param setup Object with class \code{amssetup}.
@@ -19,6 +20,21 @@
 #'     for the resampled data be normalized before mixing them?
 #'
 #' @export
+#' @examples
+#' # Sample AMS measures object
+#' measures <- as.ams.measures(sample_measures)
+#'
+#' # Experimental setup object
+#' setup <- ams.setup()
+#' 
+#' # Estimate AMS parameters and confidence intervals with 0.99 confidence 
+#' # level
+#' ams.constable(measures, setup, alpha = 0.99)
+#'
+#' # Estimate AMS parameters and confidence intervals with 0.95 confidence 
+#' # level (default) and only 100 bootstrap resamples
+#' ams.constable(measures, setup, R = 100)
+#'
 ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
 
     # cons_eig_para, is a data.frame with the eigenvalues and eigenvectors from the measurements

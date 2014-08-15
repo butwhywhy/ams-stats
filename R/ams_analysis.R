@@ -17,19 +17,34 @@
 #'
 #' @export
 #' @examples
-#' sim_analysis(methods = c('ams.hext.woN', 'ams.constable'), sus_matrix = matrix(c(1,0,0,0,2,0,0,0,3),nrow = 3), n_measurements = 10, error_dist = error_norm_dist_generator(0.3), setup = ams.setup())
-sim_analysis <- function(methods, 
-                         #lamb_ini, rot_vec, 
-                         sus_matrix,
+#' # Initial susceptibility tensor to be used as reference for the generation
+#' # of simulated data
+#' suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
+#' 
+#' sim_analysis(methods = c('ams.hext.woN', 'ams.constable'), 
+#'              sus_matrix = suscep0,
+#'              n_measurements = 10, 
+#'              error_dist = error_norm_dist_generator(0.3), 
+#'              setup = ams.setup())
+sim_analysis <- function(methods, sus_matrix,
                          n_measurements, error_dist, setup=ams.setup(), ...){
 
-    #sus_matrix <- suscep_matrix(lamb_ini, rot_vec) 
+    extra_args_names <- names(list(...))
 
     measures <- fake_measurements(sus_matrix, n_measurements, error_dist)
     result <- list()
     for (funname in methods) {
         fun <- get(funname)
-        analysis <- fun(measures, setup, ...)
+
+        # Select appropiate parameters for current method
+        admited_args <- names(formals(fun))
+        extra_args <- list(...)
+        if (! ('...' %in% admited_args)) {
+            extra_args <- extra_args[extra_args_names %in% admited_args]
+        }
+        all_args <- append(list(setup=setup, measures=measures), extra_args)
+
+        analysis <- do.call(fun, all_args)
         result[[funname]] <- analysis
     }
 
@@ -42,7 +57,7 @@ sim_analysis <- function(methods,
 #'
 #' @param methods A character vector. The names of the AMS analysis methods
 #'     to be simulated.
-#' @param sus_mat_ini Numeric 3x3 symmetric matrix.
+#' @param sus_matrix Numeric 3x3 symmetric matrix.
 #' @param n_measurements Integer. Number of repetitions of the simulated 
 #'     experimental measures.
 #' @param error_dist A function for simulating the experimental errors,
@@ -55,15 +70,25 @@ sim_analysis <- function(methods,
 #'     \code{methods} argument.
 #'
 #' @export
+#' @examples
+#' # Initial susceptibility tensor to be used as reference for the generation
+#' # of simulated data
+#' suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
+#' 
+#' consist_analysis(methods = c('ams.hext.woN', 'ams.constable'), 
+#'                  sus_matrix = suscep0,
+#'                  n_measurements = 5, 
+#'                  error_dist = error_norm_dist_generator(0.3), 
+#'                  m_iterations = 10, 
+#'                  setup = ams.setup(),
+#'                  R = 100 # additional parameter for ams.constable method`
+#'                  )
 consist_analysis <- function(methods, 
-                             #lamb_ini, rot_vec,
-                             sus_mat_ini,
+                             sus_matrix,
                              n_measurements,error_dist,m_iterations, 
                              setup=ams.setup(), ...){
 
-    #sus_mat_ini <- suscep_matrix(lamb_ini, rot_vec)
-
-    param <- eigen(sus_mat_ini)
+    param <- eigen(sus_matrix)
 
     dir_ini <- param$vectors
     eigen_ini <- param$values
@@ -144,7 +169,7 @@ consist_analysis <- function(methods,
     for (i in 1:m_iterations) {
 
         #tesitos <- sim_analysis(methods, lamb_ini, rot_vec, n_measurements, error_dist, setup, ...)
-        tesitos <- sim_analysis(methods, sus_mat_ini, n_measurements, error_dist, setup, ...)
+        tesitos <- sim_analysis(methods, sus_matrix, n_measurements, error_dist, setup, ...)
 
         for (funname in methods) {
             results[[funname]] <- updatestats(results[[funname]], tesitos[[funname]])

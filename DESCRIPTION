@@ -2,7 +2,7 @@ Package: amsstats
 Title: Statistics tools for studying the Anisotropy of Magnetic Susceptibility
 Version: 0.1
 Authors@R: c(person("Sara", "Guerrero Suarez", role=c("aut", "cre"),
-    email="buscaminasprofesional@gmail.com"),
+    email="saguerre@ucm.es"),
     person("Guillermo", "Horcajada Reales", role="aut",
     email="guillerhr@gmail.com"))
 Description: This package provides some functions to analyse directional
@@ -18,4 +18,7 @@ Depends:
 Imports:
     boot,
     plotrix
+Suggests:
+    testthat
 License: MIT + file LICENSE
+LazyData: true

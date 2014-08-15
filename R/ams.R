@@ -1,36 +1,41 @@
 #source('utils.R')
 
-.__vec_Aux<-c(.5,.5,0,-1,0,0,
-.5,.5,0,1,0,0,
-1,0,0,0,0,0,
-.5,.5,0,-1,0,0,
-.5,.5,0,1,0,0,
-0,.5,.5,0,-1,0,
-0,.5,.5,0,1,0,
-0,1,0,0,0,0,
-0,.5,.5,0,-1,0,
-0,.5,.5,0,1,0,
-.5,0,.5,0,0,-1,
-.5,0,.5,0,0,1,
-0,0,1,0,0,0,
-.5,0,.5,0,0,-1,
-.5,0,.5,0,0,1
-)
+.__vec_Aux<-c(.5, .5, 0, -1, 0, 0,
+              .5, .5, 0, 1, 0, 0,
+              1, 0, 0, 0, 0, 0,
+              .5, .5, 0, -1, 0, 0,
+              .5, .5, 0, 1, 0, 0,
+              0, .5, .5, 0, -1, 0,
+              0, .5, .5, 0, 1, 0,
+              0, 1, 0, 0, 0, 0,
+              0, .5, .5, 0, -1, 0,
+              0, .5, .5, 0, 1, 0,
+              .5, 0, .5, 0, 0, -1,
+              .5, 0, .5, 0, 0, 1,
+              0, 0, 1, 0, 0, 0,
+              .5, 0, .5, 0, 0, -1,
+              .5, 0, .5, 0, 0, 1
+              )
 
-.__vec_Aux6x6 <- c(1,0,0,0,0,0,
-                   0,1,0,0,0,0,
-                   0,0,1,0,0,0,
-                   .5,.5,0,1,0,0,
-                   0,.5,.5,0,1,0,
-                   .5,0,.5,0,0,1)
-.__mat_D_6x6 <-matrix(.__vec_Aux6x6,6,6,byrow=T)
+.__vec_Aux6x6 <- c(1, 0, 0, 0, 0, 0,
+                   0, 1, 0, 0, 0, 0,
+                   0, 0, 1, 0, 0, 0,
+                   .5, .5, 0, 1, 0, 0,
+                   0, .5, .5, 0, 1, 0,
+                   .5, 0, .5, 0, 0, 1
+                   )
 
-.__mat_D_default <-matrix(.__vec_Aux,15,6,byrow=T)
+.__mat_D_6x6 <-matrix(.__vec_Aux6x6, 6, 6, byrow=T)
+
+.__mat_D_default <-matrix(.__vec_Aux, 15, 6, byrow=T)
 
 #' Constructs a AMS experiment setup
 #'
 #' @param setup.matrix Numeric matrix.
 #' @export
+#' @examples
+#' setup <- ams.setup()
+#' class(setup)
 ams.setup <- function(setup.matrix=.__mat_D_default) {
     if (ncol(setup.matrix) != 6) {
         stop("Illegal argument: setup matrix must have 6 columns")
@@ -60,24 +65,63 @@ design_matrix <- function(setup) {
 #' This method constructs an object with class \code{ams.measures}, which uses
 #' a \code{data.frame} internally.
 #'
-#' @param repetitions Integer. The number of repetitions of measurements for 
-#'     the full experimental setup.
+#' @param repetitions Integer. It must have the same cardinality as the
+#'     \code{values} and represents the number of repetition of the
+#'     correponding measurement.
 #' @param positions Integer vector or factor. It must have the same
 #'     cardinality as the \code{vaues} parameter, and represents
 #'     the order of the corresponding measurement in the experimental
 #'     setup.
 #' @param values Numberic vector.The measured values.
 #' @export
+#' @examples
+#' reps <- rep(1, 15)
+#' poss <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)
+#' values <- c(0.86,1.26,1.10,0.86,1.26,1.26,1.26,1.02,1.26,1.26,0.80,1.80,
+#'             1.50,0.80,1.80)
+#' # Construct AMS measures object
+#' ams.measures(reps, poss, values)
 ams.measures <- function(repetitions, positions, values) {
     if (! is.integer(repetitions)) {
-        stop("Illegal argument: repetitions must be an integer vector")
+        if (! all(repetitions == as.integer(repetitions))) {
+            stop("Illegal argument: repetitions must be an integer vector")
+        }
     }
     if (! is.integer(positions)) {
-        stop("Illegal argument: positions must be an integer vector")
+        if (! all(positions == as.integer(positions))) {
+            stop("Illegal argument: positions must be an integer vector")
+        }
     }
-    result <- data.frame(N=as.factor(repetitions), Specimen=as.factor(positions), BSus=values)
+    result <- data.frame(N=as.factor(as.integer(repetitions)), 
+                         Specimen=as.factor(as.integer(positions)), 
+                         BSus=values)
     class(result) <- c('ams.measures', class(result))
     return(result)
+}
+
+#' Constructs an AMS measurements object.
+#'
+#' This method constructs an object with class \code{ams.measures}, which uses
+#' a \code{data.frame} internally. It takes as argument a data frame with at
+#' least three columns (list, data.frame, matrix,...).
+#'
+#' @param data Data frame with at least three columns. Each row represents a 
+#'     repetition of a measurement in one of the experimental setup positions. 
+#'     The first columns must be integer and is interpreted as the number of 
+#'     repetition of the measurement. The second columns, also 
+#'     integer, is the order of the corresponding measurement in the experimental
+#'     setup. And the third column, numeric, the measured values.
+#' @export
+#' @examples
+#' # Use sample dataframe
+#' class(sample_measures)
+#' 
+#' # Convert data frame to \code{ams.measures} object
+#' ams_measure <- as.ams.measures(sample_measures)
+#' class(sample_measures)
+#' 
+as.ams.measures <- function(data) {
+    return(ams.measures(data[[1]], data[[2]], data[[3]]))
 }
 
 ams.measures.single <- function(positions, values) {
@@ -133,6 +177,13 @@ ams.measures.mean <- function(measures){
 #' @param measures An object of class \code{ams.measures}.
 #' @param setup An object of class \code{ams.setup}
 #' @export
+#' @examples
+#' # Experimental setup object
+#' setup <- ams.setup()
+#' # Sample AMS measures object
+#' measures <- as.ams.measures(sample_measures)
+#' # Least squares estimation of the susceptibility tensor
+#' ams.sus_tensor(measures, setup)
 ams.sus_tensor <- function(measures, setup){
     
     if (! inherits(measures, 'ams.measures')) {
@@ -165,11 +216,11 @@ ams.sus_tensor <- function(measures, setup){
 }
 
 
-ams.measures.exact <- function(sus_tensor, setup, positions) {
+ams.measures.exact <- function(sus_tensor, setup, positions = NULL) {
     D_setup <- design_matrix(setup)
-    #if (positions == NULL) {
-        #positions = 1:nrow(D_setup)
-    #}
+    if (is.null(positions)) {
+        positions <- 1:nrow(D_setup)
+    }
 
     counts <- rep(0, nrow(D_setup))
     reps <- rep(0, length(positions))

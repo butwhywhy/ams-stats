@@ -9,6 +9,17 @@
 #' @param alpha Number between 0 and 1. Confidence level.
 #'
 #' @export
+#' @examples
+#' # Sample AMS measures object
+#' measures <- as.ams.measures(sample_measures)
+#'
+#' # Experimental setup object
+#' setup <- ams.setup()
+#' 
+#' # Estimate AMS parameters and confidence intervals with 0.99 confidence 
+#' # level
+#' ams.hext.woN(measures, setup, alpha = 0.99)
+#'
 ams.hext.woN <- function(measures, setup, alpha=0.95){
 
     param <- .__hext_param_without(measures,setup)
