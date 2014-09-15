@@ -1,3 +1,5 @@
+# Script to generate the data saved at data/samples_measures.rda
+
 source('R/utils.R')
 source('R/ams.R')
 
