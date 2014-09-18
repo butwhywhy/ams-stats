@@ -31,7 +31,7 @@ Performs simultations of AMS statistics analysis
 # of simulated data
 suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
 
-sim_analysis(methods = c('ams.hext.woN', 'ams.constable'),
+sim_analysis(methods = c('ams.hext', 'ams.constable'),
              sus_matrix = suscep0,
              n_measurements = 10,
              error_dist = error_norm_dist_generator(0.3),

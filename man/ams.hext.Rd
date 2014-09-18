@@ -3,7 +3,7 @@
 \alias{ams.hext}
 \title{Analyse AMS data using Linear Perturbation Analysis method proposed by Hext}
 \usage{
-ams.hext(measures, setup, alpha = 0.95)
+ams.hext(measures, setup, alpha = 0.95, withoutN = F)
 }
 \arguments{
 \item{measures}{Object with class \code{ams.measures}.}
@@ -11,6 +11,16 @@ ams.hext(measures, setup, alpha = 0.95)
 \item{setup}{Object with class \code{amssetup}.}
 
 \item{alpha}{Number between 0 and 1. Confidence level.}
+
+\item{withoutN}{Boolean indicating if the old version,
+extracted from some bibliography and not taking into
+account properly the number of measures,
+should be used. The default FALSE is recommended.
+Setting it to TRUE gives unexpected results, with
+errors much bigger than expected, and not scaling
+properly with the number of measures. This parameter
+is only kept with the purpose of being able to
+reproduce old results.}
 }
 \description{
 Analyse AMS data using Linear Perturbation Analysis method proposed by Hext

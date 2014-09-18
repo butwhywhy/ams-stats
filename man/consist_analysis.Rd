@@ -37,7 +37,7 @@ using syntetic data.
 # of simulated data
 suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
 
-consist_analysis(methods = c('ams.hext.woN', 'ams.constable'),
+consist_analysis(methods = c('ams.hext', 'ams.constable'),
                  sus_matrix = suscep0,
                  n_measurements = 5,
                  error_dist = error_norm_dist_generator(0.3),

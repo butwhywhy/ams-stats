@@ -7,6 +7,15 @@
 #' @param measures Object with class \code{ams.measures}.
 #' @param setup Object with class \code{amssetup}.
 #' @param alpha Number between 0 and 1. Confidence level.
+#' @param withoutN Boolean indicating if the old version,
+#' extracted from some bibliography and not taking into
+#' account properly the number of measures,
+#' should be used. The default FALSE is recommended.
+#' Setting it to TRUE gives unexpected results, with
+#' errors much bigger than expected, and not scaling
+#' properly with the number of measures. This parameter
+#' is only kept with the purpose of being able to
+#' reproduce old results.
 #'
 #' @export
 #' @examples
@@ -20,13 +29,13 @@
 #' # level
 #' ams.hext(measures, setup, alpha = 0.99)
 #'
-ams.hext <- function(measures, setup, alpha=0.95){
+ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
 
-    param <- .__hext_param(measures,setup)
+    param <- .__hext_param(measures,setup, withoutN)
 
     N <- nrow(measures) / max(poss.ams.measures(measures))
 
-    tausError <- .__errors_taus(param$eig_param,param$varianza,param$V,N, alpha)
+    tausError <- .__errors_taus(param$eig_param,param$varianza,param$V,N, alpha, withoutN)
 
     #print(tausError$taus)
 
@@ -36,11 +45,11 @@ ams.hext <- function(measures, setup, alpha=0.95){
 #
     ellipses <- .__errors_vec(param$eig_param, param$varianza, param$xb,nrow(measures),alpha)
 
-   #data <- tausError$taus
-   #
-   stats <- .__statHext(tausError$taus_means, param$eig_param, param$V, param$varianza, param$xb, nrow(measures), alpha)
+    #data <- tausError$taus
+    #
+    stats <- .__statHext(tausError$taus_means, param$eig_param, param$V, param$varianza, param$xb, nrow(measures), alpha, withoutN)
 
-   return(ams.analysis(tausError, ellipses, stats))
+    return(ams.analysis(tausError, ellipses, stats))
    #return(list(taus_means=tausError$taus_means,
                #taus_error=tausError$error,
                #taus_low=tausError$taus_low, taus_high=tausError$taus_high,ellipses=ellipses,stats=stats))
@@ -48,7 +57,7 @@ ams.hext <- function(measures, setup, alpha=0.95){
 
 # .__hext_param takes a frame with the n measurements and returns a list with a data.frame with the eigenvalues and the eigenvectors, the variance and the trace of susceptibility tensor
 
-.__hext_param <- function(measures,setup) {
+.__hext_param <- function(measures,setup, withoutN=F) {
 
 
     values <- values.ams.measures(measures)
@@ -73,11 +82,11 @@ ams.hext <- function(measures, setup, alpha=0.95){
     # Degrees of freedom, taken as the total number of measures
     # minus the 6 independent components of the tensor (see Hext1963)
     free_g <- N-6
-    if (F) {## old
-    vari <- sqrt(resid.tot/free_g)
+    if (withoutN) {## old
+        vari <- sqrt(resid.tot/free_g)
     }
     else {##yy new
-    repetitions <- N/max(positions) 
+        repetitions <- N/max(positions) 
         vari <- sqrt(resid.tot/(free_g*repetitions))
     }
 
@@ -103,7 +112,7 @@ ams.hext <- function(measures, setup, alpha=0.95){
 
 # .__errors_taus, takes the eigen-parameters and the variance and returns a list with the eigenvalues and their errors
 
-.__errors_taus <- function(eig_param,vari,positions_V,N, alpha){
+.__errors_taus <- function(eig_param,vari,positions_V,N, alpha, withoutN=F){
     
     #D_setup <- design_matrix(setup)
 
@@ -114,13 +123,11 @@ ams.hext <- function(measures, setup, alpha=0.95){
 
     alpha_margin <- 1 - alpha
 
-    # TODO va el raiz de n en el error????????
-
-    if (F) {##old
-    ts <- qnorm(1-alpha_margin/2)/sqrt(N)
+    if (withoutN) {##old
+        ts <- qnorm(1-alpha_margin/2)/sqrt(N)
     }
     else {##new
-    ts <- qnorm(1-alpha_margin/2)
+        ts <- qnorm(1-alpha_margin/2)
     }
 
     vectors <- eig_param$vectors
@@ -173,7 +180,7 @@ ams.hext <- function(measures, setup, alpha=0.95){
 
 # .__statHext takes the eigenvalues, the variance and the trace determines if the anisotropy of magnetic susceptibility (prolate, oblate)
 
-    .__statHext <- function(taus, eig_params, V, vari, xb, N, alpha) {
+    .__statHext <- function(taus, eig_params, V, vari, xb, N, alpha, withoutN=F) {
     tau1 = taus[[1]]
     tau2 = taus[[2]]
     tau3 = taus[[3]]
@@ -182,36 +189,34 @@ ams.hext <- function(measures, setup, alpha=0.95){
     vec2 <- eig_params$vectors[,2]
     vec3 <- eig_params$vectors[,3]
 
-    if (F) {##old
-    Fh <- 0.4 * (tau1^2 + tau2^2 + tau3^2 - 3*xb^2)/(vari^2)
-    F12 <- 0.5 * ((tau1 - tau2) /vari)^2
-    F23 <- 0.5 * ((tau2 - tau3) /vari)^2
-    # TODO yy: poner valores con los quantiles de la distribucion F para permitir distintos alphas. Ademas, los grados de libertad (9 para la tauxe) son consistentes?? en principio to pondria qf(alpha, df1=2, df2=n-6) y (creo) qf(alpha, df1=5, df2=n-6)
-    qF2 <- qf(alpha, df1=2, df2=N-6)    #4.2565
-    qF5 <- qf(alpha, df1=5, df2=N-6)    #3.4817
-    rF12 <- F12 > qF2
-    rF23 <- F23 > qF2
-    rFh <- Fh > qF5
+    # TODO: Differencies between this two versions? Which one is right?
+    if (withoutN) {##old
+        Fh <- 0.4 * (tau1^2 + tau2^2 + tau3^2 - 3*xb^2)/(vari^2)
+        F12 <- 0.5 * ((tau1 - tau2) /vari)^2
+        F23 <- 0.5 * ((tau2 - tau3) /vari)^2
+        qF2 <- qf(alpha, df1=2, df2=N-6)    #4.2565
+        qF5 <- qf(alpha, df1=5, df2=N-6)    #3.4817
+        rF12 <- F12 > qF2
+        rF23 <- F23 > qF2
+        rFh <- Fh > qF5
 
-    test <- ams.analysis.anisotropy_test(rF12, rF23, rFh)
-    }
+        test <- ams.analysis.anisotropy_test(rF12, rF23, rFh)
+    } else {##new
+        a1 <- a_tensor(vec1, vec1)
+        a2 <- a_tensor(vec2, vec2)
+        a3 <- a_tensor(vec3, vec3)
+        vec12 <- a1 - a2
+        vec23 <- a2 - a3
+        vec13 <- a1 - a3
+        F12 <- (tau1 - tau2) / (vari * sqrt(t(vec12) %*% V %*% vec12))
+        F23 <- (tau2 - tau3) / (vari * sqrt(t(vec23) %*% V %*% vec23))
+        F13 <- (tau1 - tau3) / (vari * sqrt(t(vec13) %*% V %*% vec13))
 
-    else {##new
-    a1 <- a_tensor(vec1, vec1)
-    a2 <- a_tensor(vec2, vec2)
-    a3 <- a_tensor(vec3, vec3)
-    vec12 <- a1 - a2
-    vec23 <- a2 - a3
-    vec13 <- a1 - a3
-    F12 <- (tau1 - tau2) / (vari * sqrt(t(vec12) %*% V %*% vec12))
-    F23 <- (tau2 - tau3) / (vari * sqrt(t(vec23) %*% V %*% vec23))
-    F13 <- (tau1 - tau3) / (vari * sqrt(t(vec13) %*% V %*% vec13))
-
-    qTN <- qt(p=alpha, df=N-6)
-    rF12 <- F12 > qTN
-    rF23 <- F23 > qTN
-    rF13 <- F13 > qTN
-    test <- ams.analysis.anisotropy_test(rF12, rF23, rF13)
+        qTN <- qt(p=alpha, df=N-6)
+        rF12 <- F12 > qTN
+        rF23 <- F23 > qTN
+        rF13 <- F13 > qTN
+        test <- ams.analysis.anisotropy_test(rF12, rF23, rF13)
     }
     return(test)
 

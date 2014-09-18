@@ -22,8 +22,8 @@ test_that("Hext method is backwards compatible", {
                   # Hext without N analysis
                   set.seed(1000001)
                   hextwon_analysis_name <- paste('hextwon', i, '_', j, sep = '')
-                  hextwon_analysis <- ams.hext.woN(measures, setup, 
-                                                 alpha = alpha)
+                  hextwon_analysis <- ams.hext(measures, setup, 
+                                               alpha = alpha, withoutN = TRUE)
                   expect_that(hextwon_analysis, equals(get(hextwon_analysis_name)))
 
               }

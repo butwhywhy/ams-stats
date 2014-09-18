@@ -2,7 +2,6 @@
 
 export(ams.constable)
 export(ams.hext)
-export(ams.hext.woN)
 export(ams.measures)
 export(ams.setup)
 export(ams.sus_tensor)

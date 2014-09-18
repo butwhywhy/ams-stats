@@ -150,6 +150,8 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
     high_error_tau2 <- high_error[2]
     high_error_tau3 <- high_error[3]
 
+    # TODO: Too naive. It does not provide a generally righ result for the confidence level. Actually, the confidence level is not even considered.
+    # TODO: provide a general statistical method, under some simple asumptions (like normaliy), more similar to what is done fr hext.
     test <- ams.analysis.anisotropy_test(high_error_tau2 < low_error_tau1, high_error_tau3 < low_error_tau2, high_error_tau3 < low_error_tau1)
 
     return(test)

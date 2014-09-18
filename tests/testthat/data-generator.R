@@ -39,7 +39,8 @@ for (i in 1:3) {
         # Hext without N analysis
         set.seed(1000001)
         hextwon_analysis_name <- paste('hextwon', i, '_', j, sep = '')
-        hextwon_analysis <- ams.hext.woN(measures, setup, alpha = alpha)
+        hextwon_analysis <- ams.hext(measures, setup, alpha = alpha, 
+                                     withoutN = TRUE)
         assign(hextwon_analysis_name, hextwon_analysis)
 
         # Hext analysis
