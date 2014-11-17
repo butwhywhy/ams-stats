@@ -9,12 +9,12 @@ Description: This package provides some functions to analyse directional
     susceptibility measurements to determine the susceptibility matrix
     and provide confidence intervals. Currently, bootstrap method
     proposed in the paper "The bootstrap for magnetic susceptibility tensors"
-    (1990) by C. Constable and L. Tauxe and linear perturbation 
+    (J Geophys Res 1990) by C. Constable and L. Tauxe and linear perturbation 
     analysis proposed in the paper "The estimation of second-order tensors, 
-    with related tests and designs"(1963) by G. R. Hext are implemented. 
+    with related tests and designs"(Biometrika 1963) by G. R. Hext are implemented. 
     Methods to produce syntethical data are also provide. This package has 
     been used in the paper "On the reliability of the AMS ellipsoid by 
-    statistical methods" (2014) by S. Guerrero-Suarez and F. Martin-Hernandez 
+    statistical methods" (Tectonophysics 2014) by S. Guerrero-Suarez and F. Martin-Hernandez 
     to compare the performance of bootstrap and linear perturbation analysis
     methods.
 Depends:
