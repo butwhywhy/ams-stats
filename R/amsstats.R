@@ -15,6 +15,6 @@ NULL
 #' @format A data frame with 3 columns and 150 rows. Each row represents a 
 #'     measurement. The three columns represent repetition,
 #'     position and value for each measurement.
-#' @source Synthetic data generated with \code{fake_measurements}.
+#' @source Synthetic data generated with \code{FakeMeasures}.
 #' @docType data
 NULL

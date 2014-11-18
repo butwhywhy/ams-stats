@@ -10,7 +10,7 @@
 #' @param n_measurements Integer. Number of repetitions of the simulated 
 #'     experimental measures.
 #' @param error_dist A function for simulating the experimental errors,
-#'     as in \code{fake_measurements}.
+#'     as in \code{FakeMeasures}.
 #' @param setup Object of class \code{AMSsetup}.
 #' @param ... Extra arguments to be passed to the functions given in the
 #'     \code{methods} argument.
@@ -21,17 +21,17 @@
 #' # of simulated data
 #' suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
 #' 
-#' sim_analysis(methods = c('ams.hext', 'ams.constable'), 
+#' AMSsimulations(methods = c('ams.hext', 'ams.constable'), 
 #'              sus_matrix = suscep0,
 #'              n_measurements = 10, 
-#'              error_dist = error_norm_dist_generator(0.3), 
+#'              error_dist = NormalErrorGenerator(0.3), 
 #'              setup = AMSsetup())
-sim_analysis <- function(methods, sus_matrix,
+AMSsimulations <- function(methods, sus_matrix,
                          n_measurements, error_dist, setup=AMSsetup(), ...){
 
     extra_args_names <- names(list(...))
 
-    measures <- fake_measurements(sus_matrix, n_measurements, error_dist)
+    measures <- FakeMeasures(sus_matrix, n_measurements, error_dist)
     result <- list()
     for (funname in methods) {
         fun <- get(funname)
@@ -61,7 +61,7 @@ sim_analysis <- function(methods, sus_matrix,
 #' @param n_measurements Integer. Number of repetitions of the simulated 
 #'     experimental measures.
 #' @param error_dist A function for simulating the experimental errors,
-#'     as in \code{fake_measurements}.
+#'     as in \code{FakeMeasures}.
 #' @param m_iterations Integer. The number of the repetitions of the whole
 #'     simulation process, needed to estimate the consistency of the 
 #'     AMS analysis methods under study.
@@ -75,15 +75,15 @@ sim_analysis <- function(methods, sus_matrix,
 #' # of simulated data
 #' suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
 #' 
-#' consist_analysis(methods = c('ams.hext', 'ams.constable'), 
+#' AnalyseConsistency(methods = c('ams.hext', 'ams.constable'), 
 #'                  sus_matrix = suscep0,
 #'                  n_measurements = 5, 
-#'                  error_dist = error_norm_dist_generator(0.3), 
+#'                  error_dist = NormalErrorGenerator(0.3), 
 #'                  m_iterations = 10, 
 #'                  setup = AMSsetup(),
 #'                  R = 100 # additional parameter for ams.constable method`
 #'                  )
-consist_analysis <- function(methods, 
+AnalyseConsistency <- function(methods, 
                              sus_matrix,
                              n_measurements,error_dist,m_iterations, 
                              setup=AMSsetup(), ...){
@@ -168,8 +168,8 @@ consist_analysis <- function(methods,
  
     for (i in 1:m_iterations) {
 
-        #tesitos <- sim_analysis(methods, lamb_ini, rot_vec, n_measurements, error_dist, setup, ...)
-        tesitos <- sim_analysis(methods, sus_matrix, n_measurements, error_dist, setup, ...)
+        #tesitos <- AMSsimulations(methods, lamb_ini, rot_vec, n_measurements, error_dist, setup, ...)
+        tesitos <- AMSsimulations(methods, sus_matrix, n_measurements, error_dist, setup, ...)
 
         for (funname in methods) {
             results[[funname]] <- updatestats(results[[funname]], tesitos[[funname]])

@@ -7,7 +7,7 @@
     measurement. The three columns represent repetition,
     position and value for each measurement.}
 \source{
-Synthetic data generated with \code{fake_measurements}.
+Synthetic data generated with \code{FakeMeasures}.
 }
 \description{
 Data frame with sample AMS experimental data, with 10

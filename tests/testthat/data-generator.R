@@ -11,10 +11,10 @@ tensor1 <- suscep_matrix(c(1, 1.3, 1.2), c(pi/11, pi/3, pi/2))
 tensor2 <- vector2symtensor(c(-.5, -1, 19, 3.4, -5, 6))
 tensor3 <- vector2symtensor(c(1.5, 2.1, 4, 30.1, 0.1, 0))
 
-dist1 <- error_norm_dist_generator(0.05)
-dist2 <- error_norm_dist_generator(0.5)
-dist3 <- error_norm_dist_generator(1.07)
-dist4 <- error_norm_dist_generator(3)
+dist1 <- NormalErrorGenerator(0.05)
+dist2 <- NormalErrorGenerator(0.5)
+dist3 <- NormalErrorGenerator(1.07)
+dist4 <- NormalErrorGenerator(3)
 
 tensors <- list(tensor1, tensor2, tensor3)
 dists <- list(dist1, dist2, dist3, dist4)
@@ -26,7 +26,7 @@ for (i in 1:3) {
         # Construct fake measurements
         set.seed(1000001)
         measure_name <- paste('measures', i, '_', j, sep = '')
-        measures <- fake_measurements(tensors[[i]], nmeas, dists[[j]], setup)
+        measures <- FakeMeasures(tensors[[i]], nmeas, dists[[j]], setup)
         assign(measure_name, measures)
 
         # Bootstrap analysis

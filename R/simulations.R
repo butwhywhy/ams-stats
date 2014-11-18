@@ -21,14 +21,14 @@
 #' sus_matrix
 #'
 #' # Simulated error distribution with standard deviation 0.5
-#' error_dist <- error_norm_dist_generator(0.5)
+#' error_dist <- NormalErrorGenerator(0.5)
 #' # Experimental setup object
 #' setup <- AMSsetup()
 #'
 #' # Fake AMS measurements object with 2 repetitions
-#' fake_measurements(sus_matrix, 2, error_dist, setup)
+#' FakeMeasures(sus_matrix, 2, error_dist, setup)
 #'
-fake_measurements <- function(sus_matrix, n_measurements, error_dist, setup=AMSsetup()) {
+FakeMeasures <- function(sus_matrix, n_measurements, error_dist, setup=AMSsetup()) {
     # error_dist(real_k, n_measures) takes a vector real_k of real values and returns a matrix 
     # with n_measures rows and length(real_k) columns, where every column containes noisy 
     # measures from a single real measure
@@ -61,7 +61,7 @@ fake_measurements <- function(sus_matrix, n_measurements, error_dist, setup=AMSs
     return(AMSmeasures(repetitions=N_column, positions=Specimen, values=k_fake))
 }
 
-#' Generates a normal noise generator for use in \code{fake_measurements} function.
+#' Generates a normal noise generator for use in \code{FakeMeasures} function.
 #'
 #' @param sigma Numeric. The standard deviation of the simulated normal noise.
 #'
@@ -69,8 +69,8 @@ fake_measurements <- function(sus_matrix, n_measurements, error_dist, setup=AMSs
 #' @examples
 #' # Normal error distribution function for synthetic AMS measures with 
 #' # standard debiation 0.1
-#' error_dist <- error_norm_dist_generator(0.1)
-error_norm_dist_generator <- function(sigma) {
+#' error_dist <- NormalErrorGenerator(0.1)
+NormalErrorGenerator <- function(sigma) {
     error_norm <- function(real_k, n_measures) {
         position_number <- length(real_k)
         N <- position_number*n_measures

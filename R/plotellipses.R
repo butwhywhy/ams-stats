@@ -10,7 +10,7 @@ plotellipses <- function(ams_tensor, sigma) {
     expected <- car2sph(t(eigenparams$vectors))
     setup <- AMSsetup()
 
-    fake <- fake_measurements(ams_tensor, n_measurements=15, error_dist=error_norm_dist_generator(sigma), setup)
+    fake <- FakeMeasures(ams_tensor, n_measurements=15, error_dist=NormalErrorGenerator(sigma), setup)
     result_hext <- ams.hext(fake, setup)
     result_boot <- ams.constable(fake, setup)
     .__plot_ellipse(ellipse_hext=result_hext$eigenvectors$ellip1, ellipse_boot=result_boot$eigenvectors$ellip1, expectedCenter=expected[1,], add=F, symbols_index=1)
