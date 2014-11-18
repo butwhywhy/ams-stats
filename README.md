@@ -4,7 +4,7 @@ amsstats
 Statistics tools for determining the eigenparameters and their confidence 
 intervals of the Anisotropy of Magnetic Susceptibility tensor. The results 
 are obtained by bootstrap method (Constable, C. and Tauxe, L.; J Geophys Res, 1990) 
-and linear perturbation analysis (Hext, G.R.; Biiometrika, 1963). 
+and linear perturbation analysis (Hext, G.R.; Biometrika, 1963). 
 
 Installation
 ------------
