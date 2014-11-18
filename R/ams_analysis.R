@@ -11,7 +11,7 @@
 #'     experimental measures.
 #' @param error_dist A function for simulating the experimental errors,
 #'     as in \code{fake_measurements}.
-#' @param setup Object of class \code{ams.setup}.
+#' @param setup Object of class \code{AMSsetup}.
 #' @param ... Extra arguments to be passed to the functions given in the
 #'     \code{methods} argument.
 #'
@@ -25,9 +25,9 @@
 #'              sus_matrix = suscep0,
 #'              n_measurements = 10, 
 #'              error_dist = error_norm_dist_generator(0.3), 
-#'              setup = ams.setup())
+#'              setup = AMSsetup())
 sim_analysis <- function(methods, sus_matrix,
-                         n_measurements, error_dist, setup=ams.setup(), ...){
+                         n_measurements, error_dist, setup=AMSsetup(), ...){
 
     extra_args_names <- names(list(...))
 
@@ -65,7 +65,7 @@ sim_analysis <- function(methods, sus_matrix,
 #' @param m_iterations Integer. The number of the repetitions of the whole
 #'     simulation process, needed to estimate the consistency of the 
 #'     AMS analysis methods under study.
-#' @param setup Object of class \code{ams.setup}.
+#' @param setup Object of class \code{AMSsetup}.
 #' @param ... Extra arguments to be passed to the functions given in the
 #'     \code{methods} argument.
 #'
@@ -80,13 +80,13 @@ sim_analysis <- function(methods, sus_matrix,
 #'                  n_measurements = 5, 
 #'                  error_dist = error_norm_dist_generator(0.3), 
 #'                  m_iterations = 10, 
-#'                  setup = ams.setup(),
+#'                  setup = AMSsetup(),
 #'                  R = 100 # additional parameter for ams.constable method`
 #'                  )
 consist_analysis <- function(methods, 
                              sus_matrix,
                              n_measurements,error_dist,m_iterations, 
-                             setup=ams.setup(), ...){
+                             setup=AMSsetup(), ...){
 
     param <- eigen(sus_matrix)
 
@@ -102,9 +102,9 @@ consist_analysis <- function(methods,
     updatestats <- function(stats, test_results) {
         stats$totalcount <- stats$totalcount + 1
 
-        eigenvalues <- eigenvalues.ams.analysis(test_results)
-        eigenvectors <- eigenvectors.ams.analysis(test_results)
-        anisotropy_test <- anisotropy_test.ams.analysis(test_results)
+        eigenvalues <- eigenvalues.AMSanalysis(test_results)
+        eigenvectors <- eigenvectors.AMSanalysis(test_results)
+        anisotropy_test <- anisotropy_test.AMSanalysis(test_results)
 
         stats$sum_errors_eigenvalues <- stats$sum_errors_eigenvalues + (eigenvalues$taus_high - eigenvalues$taus_low)/2
         stats$sum_errors_etas[1] <- stats$sum_errors_etas[1] + eigenvectors$ellip1$eta

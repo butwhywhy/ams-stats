@@ -6,7 +6,7 @@
 ams.hext(measures, setup, alpha = 0.95, withoutN = F)
 }
 \arguments{
-\item{measures}{Object with class \code{ams.measures}.}
+\item{measures}{Object with class \code{AMSmeasures}.}
 
 \item{setup}{Object with class \code{amssetup}.}
 
@@ -27,10 +27,10 @@ Analyse AMS data using Linear Perturbation Analysis method proposed by Hext
 }
 \examples{
 # Sample AMS measures object
-measures <- as.ams.measures(sample_measures)
+measures <- as.AMSmeasures(sample_measures)
 
 # Experimental setup object
-setup <- ams.setup()
+setup <- AMSsetup()
 
 # Estimate AMS parameters and confidence intervals with 0.99 confidence
 # level

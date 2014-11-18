@@ -1,7 +1,7 @@
 
 stop("This script should not be normally executed")
 
-setup <- ams.setup()
+setup <- AMSsetup()
 
 nmeas <- 8
 alpha <- 0.9

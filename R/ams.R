@@ -34,15 +34,15 @@
 #' @param setup.matrix Numeric matrix.
 #' @export
 #' @examples
-#' setup <- ams.setup()
+#' setup <- AMSsetup()
 #' class(setup)
-ams.setup <- function(setup.matrix=.__mat_D_default) {
+AMSsetup <- function(setup.matrix=.__mat_D_default) {
     if (ncol(setup.matrix) != 6) {
         stop("Illegal argument: setup matrix must have 6 columns")
     }
 
     result <- list()
-    class(result) <- c('ams.setup', class(result))
+    class(result) <- c('AMSsetup', class(result))
     result$.__matrix <- setup.matrix
     result$.__B <- .__positions_B(setup.matrix)
     return(result)
@@ -54,15 +54,15 @@ ams.setup <- function(setup.matrix=.__mat_D_default) {
 }
 
 design_matrix <- function(setup) {
-    if (! inherits(setup, 'ams.setup')) {
-        stop("Illegal argument: setup must be of class 'ams.setup'")
+    if (! inherits(setup, 'AMSsetup')) {
+        stop("Illegal argument: setup must be of class 'AMSsetup'")
     }
     return(setup$.__matrix)
 }
 
 #' Constructs an AMS measurements object
 #'
-#' This method constructs an object with class \code{ams.measures}, which uses
+#' This method constructs an object with class \code{AMSmeasures}, which uses
 #' a \code{data.frame} internally.
 #'
 #' @param repetitions Integer. It must have the same cardinality as the
@@ -80,8 +80,8 @@ design_matrix <- function(setup) {
 #' values <- c(0.86,1.26,1.10,0.86,1.26,1.26,1.26,1.02,1.26,1.26,0.80,1.80,
 #'             1.50,0.80,1.80)
 #' # Construct AMS measures object
-#' ams.measures(reps, poss, values)
-ams.measures <- function(repetitions, positions, values) {
+#' AMSmeasures(reps, poss, values)
+AMSmeasures <- function(repetitions, positions, values) {
     if (! is.integer(repetitions)) {
         if (! all(repetitions == as.integer(repetitions))) {
             stop("Illegal argument: repetitions must be an integer vector")
@@ -95,13 +95,13 @@ ams.measures <- function(repetitions, positions, values) {
     result <- data.frame(N=as.factor(as.integer(repetitions)), 
                          Specimen=as.factor(as.integer(positions)), 
                          BSus=values)
-    class(result) <- c('ams.measures', class(result))
+    class(result) <- c('AMSmeasures', class(result))
     return(result)
 }
 
 #' Constructs an AMS measurements object.
 #'
-#' This method constructs an object with class \code{ams.measures}, which uses
+#' This method constructs an object with class \code{AMSmeasures}, which uses
 #' a \code{data.frame} internally. It takes as argument a data frame with at
 #' least three columns (list, data.frame, matrix,...).
 #'
@@ -116,49 +116,49 @@ ams.measures <- function(repetitions, positions, values) {
 #' # Use sample dataframe
 #' class(sample_measures)
 #' 
-#' # Convert data frame to \code{ams.measures} object
-#' ams_measure <- as.ams.measures(sample_measures)
+#' # Convert data frame to \code{AMSmeasures} object
+#' ams_measure <- as.AMSmeasures(sample_measures)
 #' class(sample_measures)
 #' 
-as.ams.measures <- function(data) {
-    return(ams.measures(data[[1]], data[[2]], data[[3]]))
+as.AMSmeasures <- function(data) {
+    return(AMSmeasures(data[[1]], data[[2]], data[[3]]))
 }
 
-ams.measures.single <- function(positions, values) {
+AMSmeasures.single <- function(positions, values) {
     reps <- rep(as.integer(1), length(values))
-    ams.measures(reps, positions, values)
+    AMSmeasures(reps, positions, values)
 }
 
-reps.ams.measures <- function(measures) {
-    if (! inherits(measures, 'ams.measures')) {
-        stop("Illegal argument: measures must be of class 'ams.measures'")
+reps.AMSmeasures <- function(measures) {
+    if (! inherits(measures, 'AMSmeasures')) {
+        stop("Illegal argument: measures must be of class 'AMSmeasures'")
     }
     return(as.integer(as.character(measures$N)))
 }
 
-poss.ams.measures <- function(measures) {
-    if (! inherits(measures, 'ams.measures')) {
-        stop("Illegal argument: measures must be of class 'ams.measures'")
+poss.AMSmeasures <- function(measures) {
+    if (! inherits(measures, 'AMSmeasures')) {
+        stop("Illegal argument: measures must be of class 'AMSmeasures'")
     }
     return(as.integer(as.character(measures$Specimen)))
 }
 
-values.ams.measures <- function(measures) {
-    if (! inherits(measures, 'ams.measures')) {
-        stop("Illegal argument: measures must be of class 'ams.measures'")
+values.AMSmeasures <- function(measures) {
+    if (! inherits(measures, 'AMSmeasures')) {
+        stop("Illegal argument: measures must be of class 'AMSmeasures'")
     }
     return(measures$BSus)
 }
 
-# ams.measures.read takes a data file and return an ams.measures object
-ams.measures.read <- function(datapath) {
+# AMSmeasures.read takes a data file and return an AMSmeasures object
+AMSmeasures.read <- function(datapath) {
     frame <- read.table(datapath, header=T)
-    ams.measures(repetitions=frame$N, positions=frame$Specimen, values=frame$BSus)
+    AMSmeasures(repetitions=frame$N, positions=frame$Specimen, values=frame$BSus)
 }
 
-# ams.measures.mean takes an ams.measures object and return another ams.measures object
+# AMSmeasures.mean takes an AMSmeasures object and return another AMSmeasures object
 # with a single repetition and the mean value for each measured position
-ams.measures.mean <- function(measures){
+AMSmeasures.mean <- function(measures){
     mean_aux <- function(data, l) {
         mean.data <- mean(data)
         return(mean.data)
@@ -167,39 +167,39 @@ ams.measures.mean <- function(measures){
 
     poss <- as.integer(as.character(means$factors))
 
-    ams.measures.single(positions=poss, values=means$values)
+    AMSmeasures.single(positions=poss, values=means$values)
 }
 
 
-#' ams.sus_tensor takes a ams.measures object and its setup and returns the 
+#' SuscTensor takes a AMSmeasures object and its setup and returns the 
 #' best estimate for the susceptibility tensor as a 3 times 3 matrix.
 #'
-#' @param measures An object of class \code{ams.measures}.
-#' @param setup An object of class \code{ams.setup}
+#' @param measures An object of class \code{AMSmeasures}.
+#' @param setup An object of class \code{AMSsetup}
 #' @export
 #' @examples
 #' # Experimental setup object
-#' setup <- ams.setup()
+#' setup <- AMSsetup()
 #' # Sample AMS measures object
-#' measures <- as.ams.measures(sample_measures)
+#' measures <- as.AMSmeasures(sample_measures)
 #' # Least squares estimation of the susceptibility tensor
-#' ams.sus_tensor(measures, setup)
-ams.sus_tensor <- function(measures, setup){
+#' SuscTensor(measures, setup)
+SuscTensor <- function(measures, setup){
     
-    if (! inherits(measures, 'ams.measures')) {
-        stop("Illegal argument: measures must be of class 'ams.measures'")
+    if (! inherits(measures, 'AMSmeasures')) {
+        stop("Illegal argument: measures must be of class 'AMSmeasures'")
     }
-    if (! inherits(setup, 'ams.setup')) {
-        stop("Illegal argument: setup must be of class 'ams.setup'")
+    if (! inherits(setup, 'AMSsetup')) {
+        stop("Illegal argument: setup must be of class 'AMSsetup'")
     }
 
     D_setup <- design_matrix(setup)
-    pos <- poss.ams.measures(measures);
+    pos <- poss.AMSmeasures(measures);
 
     D <- .__repeatD(D_setup, pos)
 
     B <- .__positions_B(D)
-    sus_vec <- B %*% values.ams.measures(measures)
+    sus_vec <- B %*% values.AMSmeasures(measures)
 
     sus_mat <- vector2symtensor(sus_vec)
 
@@ -216,7 +216,7 @@ ams.sus_tensor <- function(measures, setup){
 }
 
 
-ams.measures.exact <- function(sus_tensor, setup, positions = NULL) {
+AMSmeasures.exact <- function(sus_tensor, setup, positions = NULL) {
     D_setup <- design_matrix(setup)
     if (is.null(positions)) {
         positions <- 1:nrow(D_setup)
@@ -235,25 +235,25 @@ ams.measures.exact <- function(sus_tensor, setup, positions = NULL) {
     vec <- symtensor2vector(sus_tensor)
 
     values <- D %*% vec
-    return(ams.measures(values=values, positions=positions, repetitions=as.integer(reps)))
+    return(AMSmeasures(values=values, positions=positions, repetitions=as.integer(reps)))
 }
 
-ams.analysis <- function(eigenvalues, eigenvectors, anisotropy_test) {
-    if (!inherits(eigenvalues, 'ams.analysis.eigenvalues')) {
-        stop('eigenvalues must be of class ams.analysis.eigenvalues')
+AMSanalysis <- function(eigenvalues, eigenvectors, anisotropy_test) {
+    if (!inherits(eigenvalues, 'AMSanalysis.eigenvalues')) {
+        stop('eigenvalues must be of class AMSanalysis.eigenvalues')
     }
-    if (!inherits(eigenvectors, 'ams.analysis.eigenvectors')) {
-        stop('eigenvectors must be of class ams.analysis.eigenvectors')
+    if (!inherits(eigenvectors, 'AMSanalysis.eigenvectors')) {
+        stop('eigenvectors must be of class AMSanalysis.eigenvectors')
     }
-    if (!inherits(anisotropy_test, 'ams.analysis.anisotropy_test')) {
+    if (!inherits(anisotropy_test, 'AMSanalysis.anisotropy_test')) {
         stop('anisoropy_test must be of class ams.analyisis.anisotropy_test')
     }
     results <- list(eigenvalues=eigenvalues, eigenvectors=eigenvectors, anisotropy_test=anisotropy_test)
-    class(results) <- c('ams.analysis', class(results))
+    class(results) <- c('AMSanalysis', class(results))
     return(results)
 }
 
-ams.analysis.eigenvalues <- function(taus_means, taus_errors, taus_low=NULL, taus_high=NULL) {
+AMSanalysis.eigenvalues <- function(taus_means, taus_errors, taus_low=NULL, taus_high=NULL) {
     if (is.null(taus_errors) && (is.null(taus_low) || is.null(taus_high))) {
         stop('if taus_low or taus_high are not given, taus_errors must be given')
     }
@@ -264,29 +264,29 @@ ams.analysis.eigenvalues <- function(taus_means, taus_errors, taus_low=NULL, tau
         taus_high <- taus_means + taus_errors
     }
     taus <- list(taus_means=taus_means, taus_low=taus_low, taus_high=taus_high)
-    class(taus) <- c('ams.analysis.eigenvalues', class(taus))
+    class(taus) <- c('AMSanalysis.eigenvalues', class(taus))
     return(taus)
 }
 
-eigenvalues.ams.analysis <- function(analysis) {
-    if (!inherits(analysis, 'ams.analysis')) {
-        stop('not ams.analysis object')
+eigenvalues.AMSanalysis <- function(analysis) {
+    if (!inherits(analysis, 'AMSanalysis')) {
+        stop('not AMSanalysis object')
     }
     return(analysis$eigenvalues)
 }
     
-ams.analysis.eigenvectors <- function(conf_ellipse1, conf_ellipse2, conf_ellipse3) {
+AMSanalysis.eigenvectors <- function(conf_ellipse1, conf_ellipse2, conf_ellipse3) {
     if (! (inherits(conf_ellipse1, 'spherical_ellipse') && inherits(conf_ellipse2, 'spherical_ellipse') && inherits(conf_ellipse3, 'spherical_ellipse'))) {
         stop('arguments must be of class spherical_ellipse')
     }
     vec_ellipse <- list(ellip1=conf_ellipse1, ellip2=conf_ellipse2, ellip3=conf_ellipse3)
-    class(vec_ellipse) <- c('ams.analysis.eigenvectors', class(vec_ellipse))
+    class(vec_ellipse) <- c('AMSanalysis.eigenvectors', class(vec_ellipse))
     return(vec_ellipse)
 }
 
-eigenvectors.ams.analysis <- function(analysis) {
-    if (!inherits(analysis, 'ams.analysis')) {
-        stop('not ams.analysis object')
+eigenvectors.AMSanalysis <- function(analysis) {
+    if (!inherits(analysis, 'AMSanalysis')) {
+        stop('not AMSanalysis object')
     }
     return(analysis$eigenvectors)
 }
@@ -295,17 +295,17 @@ eigenvectors.ams.analysis <- function(analysis) {
 .__reject23 <- 'reject tau2=tau3'
 .__reject123 <- 'reject tau1=tau2=tau3'
 
-ams.analysis.anisotropy_test <- function(higherLTmedium, mediumLTlower, higherLTlower) {
+AMSanalysis.anisotropy_test <- function(higherLTmedium, mediumLTlower, higherLTlower) {
     somedistinct <- higherLTmedium || mediumLTlower || higherLTlower
     test <- c(higherLTmedium, mediumLTlower, somedistinct)
-    class(test) <- c('ams.analysis.anisotropy_test', class(test))
+    class(test) <- c('AMSanalysis.anisotropy_test', class(test))
     names(test) <- c(.__reject12, .__reject23, .__reject123)
     return(test)
 }
 
-anisotropy_test.ams.analysis <- function(analysis) {
-    if (!inherits(analysis, 'ams.analysis')) {
-        stop('not ams.analysis object')
+anisotropy_test.AMSanalysis <- function(analysis) {
+    if (!inherits(analysis, 'AMSanalysis')) {
+        stop('not AMSanalysis object')
     }
     return(analysis$anisotropy_test)
 }
@@ -322,7 +322,7 @@ reject1Eq2Eq3 <- function(anisotropy_test) {
     return(anisotropy_test[.__reject123])
 }
 
-print.ams.analysis.anisotropy_test <- function(test) {
+print.AMSanalysis.anisotropy_test <- function(test) {
     print.default(unclass(test))
     if (!test[.__reject123]) {
         print('Isotropy hypothesis not rejected')

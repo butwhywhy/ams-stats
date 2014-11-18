@@ -4,7 +4,7 @@
 \title{Performs simultations of AMS statistics analysis}
 \usage{
 sim_analysis(methods, sus_matrix, n_measurements, error_dist,
-  setup = ams.setup(), ...)
+  setup = AMSsetup(), ...)
 }
 \arguments{
 \item{methods}{A character vector. The names of the AMS analysis methods
@@ -18,7 +18,7 @@ experimental measures.}
 \item{error_dist}{A function for simulating the experimental errors,
 as in \code{fake_measurements}.}
 
-\item{setup}{Object of class \code{ams.setup}.}
+\item{setup}{Object of class \code{AMSsetup}.}
 
 \item{...}{Extra arguments to be passed to the functions given in the
     \code{methods} argument.}
@@ -35,6 +35,6 @@ sim_analysis(methods = c('ams.hext', 'ams.constable'),
              sus_matrix = suscep0,
              n_measurements = 10,
              error_dist = error_norm_dist_generator(0.3),
-             setup = ams.setup())
+             setup = AMSsetup())
 }
 

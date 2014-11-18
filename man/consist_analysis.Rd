@@ -5,7 +5,7 @@
 using syntetic data.}
 \usage{
 consist_analysis(methods, sus_matrix, n_measurements, error_dist, m_iterations,
-  setup = ams.setup(), ...)
+  setup = AMSsetup(), ...)
 }
 \arguments{
 \item{methods}{A character vector. The names of the AMS analysis methods
@@ -23,7 +23,7 @@ as in \code{fake_measurements}.}
 simulation process, needed to estimate the consistency of the
 AMS analysis methods under study.}
 
-\item{setup}{Object of class \code{ams.setup}.}
+\item{setup}{Object of class \code{AMSsetup}.}
 
 \item{...}{Extra arguments to be passed to the functions given in the
     \code{methods} argument.}
@@ -42,7 +42,7 @@ consist_analysis(methods = c('ams.hext', 'ams.constable'),
                  n_measurements = 5,
                  error_dist = error_norm_dist_generator(0.3),
                  m_iterations = 10,
-                 setup = ams.setup(),
+                 setup = AMSsetup(),
                  R = 100 # additional parameter for ams.constable method`
                  )
 }

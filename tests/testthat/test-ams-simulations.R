@@ -34,18 +34,18 @@ test_that("fake_measurements works", {
               dist0 <- error_norm_dist_generator(0)
               fake0 <- fake_measurements(tensor, 1, dist0, setup)
 
-              expect_that(fake0, equals(ams.measures.exact(tensor, setup)))
-              expect_that(ams.sus_tensor(fake0, setup), equals(tensor))
+              expect_that(fake0, equals(AMSmeasures.exact(tensor, setup)))
+              expect_that(SuscTensor(fake0, setup), equals(tensor))
 
               fake0_10 <- fake_measurements(tensor, 10, dist0, setup)
-              expect_that(ams.sus_tensor(fake0_10, setup), equals(tensor))
+              expect_that(SuscTensor(fake0_10, setup), equals(tensor))
 
               dist0.2 <- error_norm_dist_generator(0.2)
               fake0.2 <- fake_measurements(tensor, 500, dist0.2, setup)
-              expect_that(ams.sus_tensor(fake0.2, setup), equals(tensor, tolerance = 0.05))
+              expect_that(SuscTensor(fake0.2, setup), equals(tensor, tolerance = 0.05))
           }
 
-          setup <- ams.setup()
+          setup <- AMSsetup()
 
           tensor1 <- suscep_matrix(c(1, 1.3, 1.2), c(pi/11, pi/3, pi/2))
           check_fake(tensor1, setup)

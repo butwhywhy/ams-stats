@@ -3,7 +3,7 @@
 \alias{fake_measurements}
 \title{Generates a synthetic AMS measurements object}
 \usage{
-fake_measurements(sus_matrix, n_measurements, error_dist, setup = ams.setup())
+fake_measurements(sus_matrix, n_measurements, error_dist, setup = AMSsetup())
 }
 \arguments{
 \item{sus_matrix}{Nueric 3x3 symetric matrix.}
@@ -18,7 +18,7 @@ matrix, being \code{n} the length of its first argument and \code{m}
 the second one. This function is interpreted as a random generator
 for the simulated AMS measures.}
 
-\item{setup}{Object of class \code{ams.setup}.}
+\item{setup}{Object of class \code{AMSsetup}.}
 }
 \description{
 Generates a synthetic AMS measurements object
@@ -31,7 +31,7 @@ sus_matrix
 # Simulated error distribution with standard deviation 0.5
 error_dist <- error_norm_dist_generator(0.5)
 # Experimental setup object
-setup <- ams.setup()
+setup <- AMSsetup()
 
 # Fake AMS measurements object with 2 repetitions
 fake_measurements(sus_matrix, 2, error_dist, setup)

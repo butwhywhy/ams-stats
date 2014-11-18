@@ -25,7 +25,7 @@ data_cons <- function(d1,d2,d3,d4,d5,d6){
     BSus <- c(k11[,2],k22[,2],k33[,2],k12[,2],k13[,2],k23[,2]) 
 
     #measures <- data.frame(N=N, Specimen=Specimen, BSus=BSus)
-    measures <- ams.measures(repetitions=N, positions=Specimen, values=BSus)
+    measures <- AMSmeasures(repetitions=N, positions=Specimen, values=BSus)
 
     return(measures)
 }

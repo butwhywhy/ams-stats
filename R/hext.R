@@ -4,7 +4,7 @@
 
 #' Analyse AMS data using Linear Perturbation Analysis method proposed by Hext
 #'
-#' @param measures Object with class \code{ams.measures}.
+#' @param measures Object with class \code{AMSmeasures}.
 #' @param setup Object with class \code{amssetup}.
 #' @param alpha Number between 0 and 1. Confidence level.
 #' @param withoutN Boolean indicating if the old version,
@@ -20,10 +20,10 @@
 #' @export
 #' @examples
 #' # Sample AMS measures object
-#' measures <- as.ams.measures(sample_measures)
+#' measures <- as.AMSmeasures(sample_measures)
 #'
 #' # Experimental setup object
-#' setup <- ams.setup()
+#' setup <- AMSsetup()
 #' 
 #' # Estimate AMS parameters and confidence intervals with 0.99 confidence 
 #' # level
@@ -33,7 +33,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
 
     param <- .__hext_param(measures,setup, withoutN)
 
-    N <- nrow(measures) / max(poss.ams.measures(measures))
+    N <- nrow(measures) / max(poss.AMSmeasures(measures))
 
     tausError <- .__errors_taus(param$eig_param,param$varianza,param$V,N, alpha, withoutN)
 
@@ -49,7 +49,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
     #
     stats <- .__statHext(tausError$taus_means, param$eig_param, param$V, param$varianza, param$xb, nrow(measures), alpha, withoutN)
 
-    return(ams.analysis(tausError, ellipses, stats))
+    return(AMSanalysis(tausError, ellipses, stats))
    #return(list(taus_means=tausError$taus_means,
                #taus_error=tausError$error,
                #taus_low=tausError$taus_low, taus_high=tausError$taus_high,ellipses=ellipses,stats=stats))
@@ -60,14 +60,14 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
 .__hext_param <- function(measures,setup, withoutN=F) {
 
 
-    values <- values.ams.measures(measures)
+    values <- values.AMSmeasures(measures)
 
-    positions <- poss.ams.measures(measures)
+    positions <- poss.AMSmeasures(measures)
 
     #suscHext, susceptibility matrix
-    suscHext <- ams.sus_tensor(measures,setup)
+    suscHext <- SuscTensor(measures,setup)
 
-    measur_fit <- ams.measures.exact(suscHext,setup,positions)
+    measur_fit <- AMSmeasures.exact(suscHext,setup,positions)
 
     # resid, is a vector with the residuals
 
@@ -143,7 +143,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
 
     error_taus <- c(error_tau1, error_tau2, error_tau3)
 
-    return(ams.analysis.eigenvalues(taus_means=eig_param$values, taus_errors=error_taus))
+    return(AMSanalysis.eigenvalues(taus_means=eig_param$values, taus_errors=error_taus))
     #return(list(taus=eig_param$values, error=error_taus))
 
    }
@@ -175,7 +175,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
     #elip_vec3 <- list(eta=eli13, zeta=eli23, edir=coor_polar[1,], zdir=coor_polar[2,],center=coor_polar[3,])
 #
     #return (list(elip_vec1=elip_vec1, elip_vec2=elip_vec2, elip_vec3=elip_vec3))
-    return(ams.analysis.eigenvectors(ellip1, ellip2, ellip3))
+    return(AMSanalysis.eigenvectors(ellip1, ellip2, ellip3))
 }
 
 # .__statHext takes the eigenvalues, the variance and the trace determines if the anisotropy of magnetic susceptibility (prolate, oblate)
@@ -200,7 +200,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
         rF23 <- F23 > qF2
         rFh <- Fh > qF5
 
-        test <- ams.analysis.anisotropy_test(rF12, rF23, rFh)
+        test <- AMSanalysis.anisotropy_test(rF12, rF23, rFh)
     } else {##new
         a1 <- a_tensor(vec1, vec1)
         a2 <- a_tensor(vec2, vec2)
@@ -216,7 +216,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
         rF12 <- F12 > qTN
         rF23 <- F23 > qTN
         rF13 <- F13 > qTN
-        test <- ams.analysis.anisotropy_test(rF12, rF23, rF13)
+        test <- AMSanalysis.anisotropy_test(rF12, rF23, rF13)
     }
     return(test)
 

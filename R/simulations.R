@@ -12,7 +12,7 @@
 #'     matrix, being \code{n} the length of its first argument and \code{m}
 #'     the second one. This function is interpreted as a random generator
 #'     for the simulated AMS measures.
-#' @param setup Object of class \code{ams.setup}.
+#' @param setup Object of class \code{AMSsetup}.
 #'
 #' @export
 #' @examples
@@ -23,12 +23,12 @@
 #' # Simulated error distribution with standard deviation 0.5
 #' error_dist <- error_norm_dist_generator(0.5)
 #' # Experimental setup object
-#' setup <- ams.setup()
+#' setup <- AMSsetup()
 #'
 #' # Fake AMS measurements object with 2 repetitions
 #' fake_measurements(sus_matrix, 2, error_dist, setup)
 #'
-fake_measurements <- function(sus_matrix, n_measurements, error_dist, setup=ams.setup()) {
+fake_measurements <- function(sus_matrix, n_measurements, error_dist, setup=AMSsetup()) {
     # error_dist(real_k, n_measures) takes a vector real_k of real values and returns a matrix 
     # with n_measures rows and length(real_k) columns, where every column containes noisy 
     # measures from a single real measure
@@ -58,7 +58,7 @@ fake_measurements <- function(sus_matrix, n_measurements, error_dist, setup=ams.
 
     Specimen <- rep(c(1:position_number),each=n_measurements)
 
-    return(ams.measures(repetitions=N_column, positions=Specimen, values=k_fake))
+    return(AMSmeasures(repetitions=N_column, positions=Specimen, values=k_fake))
 }
 
 #' Generates a normal noise generator for use in \code{fake_measurements} function.

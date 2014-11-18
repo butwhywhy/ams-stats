@@ -33,35 +33,35 @@ mat_D_6x6 <-matrix(vec_Aux6x6, 6, 6, byrow=T)
 mat_D_default <-matrix(vec_Aux, 15, 6, byrow=T)
 # ----------------------------------------
 
-test_that("ams.setup constructor works", {
-          default <- ams.setup()
-          expect_that(default, is_a('ams.setup'))
+test_that("AMSsetup constructor works", {
+          default <- AMSsetup()
+          expect_that(default, is_a('AMSsetup'))
           expect_that(design_matrix(default), is_identical_to(mat_D_default))
 
-          setup6x6 <- ams.setup(setup.matrix = mat_D_6x6)
-          expect_that(setup6x6, is_a('ams.setup'))
+          setup6x6 <- AMSsetup(setup.matrix = mat_D_6x6)
+          expect_that(setup6x6, is_a('AMSsetup'))
           expect_that(design_matrix(setup6x6), is_identical_to(mat_D_6x6))
 })
 
-test_that("ams.measures constructors works", {
+test_that("AMSmeasures constructors works", {
           reps <- rep(1, 15)
           poss <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)
           values <- c(0.86,1.26,1.10,0.86,1.26,1.26,1.26,1.02,1.26,1.26,
                       0.80,1.80,1.50,0.80,1.80)
-          measures <- ams.measures(reps, poss, values)
-          expect_that(measures, is_a('ams.measures'))
+          measures <- AMSmeasures(reps, poss, values)
+          expect_that(measures, is_a('AMSmeasures'))
           
           dataframe <- data.frame(reps, poss, values)
-          measures2 <- as.ams.measures(dataframe)
-          expect_that(measures2, is_a('ams.measures'))
+          measures2 <- as.AMSmeasures(dataframe)
+          expect_that(measures2, is_a('AMSmeasures'))
           expect_that(measures2, equals(measures))
 
 })
 
 test_that("estimation of AMS tensor and generation of exact measures are consistent", {
-          check_consistent <- function(tensor, setup=ams.setup()) {
-              measures <- ams.measures.exact(tensor, setup)
-              tensor2 <- ams.sus_tensor(measures, setup)
+          check_consistent <- function(tensor, setup=AMSsetup()) {
+              measures <- AMSmeasures.exact(tensor, setup)
+              tensor2 <- SuscTensor(measures, setup)
               expect_that(tensor2, equals(tensor))
           }
           

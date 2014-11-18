@@ -6,7 +6,7 @@
 ams.constable(measures, setup, alpha = 0.95, R = 1000, normalize = FALSE)
 }
 \arguments{
-\item{measures}{Object with class \code{ams.measures}.}
+\item{measures}{Object with class \code{AMSmeasures}.}
 
 \item{setup}{Object with class \code{amssetup}.}
 
@@ -18,16 +18,16 @@ ams.constable(measures, setup, alpha = 0.95, R = 1000, normalize = FALSE)
     for the resampled data be normalized before mixing them?}
 }
 \description{
-This function takes a \code{ams.measures} object and returns the estimated
+This function takes a \code{AMSmeasures} object and returns the estimated
 eigenvalues and their errors and the estimated eigenvectors with
 their errors.
 }
 \examples{
 # Sample AMS measures object
-measures <- as.ams.measures(sample_measures)
+measures <- as.AMSmeasures(sample_measures)
 
 # Experimental setup object
-setup <- ams.setup()
+setup <- AMSsetup()
 
 # Estimate AMS parameters and confidence intervals with 0.99 confidence
 # level

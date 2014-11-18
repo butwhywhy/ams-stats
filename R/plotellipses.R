@@ -8,7 +8,7 @@
 plotellipses <- function(ams_tensor, sigma) {
     eigenparams <- eigen(ams_tensor)
     expected <- car2sph(t(eigenparams$vectors))
-    setup <- ams.setup()
+    setup <- AMSsetup()
 
     fake <- fake_measurements(ams_tensor, n_measurements=15, error_dist=error_norm_dist_generator(sigma), setup)
     result_hext <- ams.hext(fake, setup)

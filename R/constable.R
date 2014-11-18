@@ -8,11 +8,11 @@
 
 #' Analyse AMS data using Bootstrap method proposed by Hext.
 #'
-#' This function takes a \code{ams.measures} object and returns the estimated 
+#' This function takes a \code{AMSmeasures} object and returns the estimated 
 #' eigenvalues and their errors and the estimated eigenvectors with 
 #' their errors.
 #' 
-#' @param measures Object with class \code{ams.measures}.
+#' @param measures Object with class \code{AMSmeasures}.
 #' @param setup Object with class \code{amssetup}.
 #' @param alpha Number between 0 and 1. Confidence level.
 #' @param R Integer. Number of resamplings
@@ -22,10 +22,10 @@
 #' @export
 #' @examples
 #' # Sample AMS measures object
-#' measures <- as.ams.measures(sample_measures)
+#' measures <- as.AMSmeasures(sample_measures)
 #'
 #' # Experimental setup object
-#' setup <- ams.setup()
+#' setup <- AMSsetup()
 #' 
 #' # Estimate AMS parameters and confidence intervals with 0.99 confidence 
 #' # level
@@ -43,7 +43,7 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
 
     # n, determines the measurements numbers
     
-    #n <- nrow(measures) / max(poss.ams.measures(measures))
+    #n <- nrow(measures) / max(poss.AMSmeasures(measures))
 
     # tausWithError, is a list with the three means taus and their errors
 
@@ -67,10 +67,10 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
 
     # ellipses is a list with all ellipse's parameters for the three means vectors
    #ellipses <- list(elip_vec1=elip_vec1, elip_vec2=elip_vec2, elip_vec3=elip_vec3) 
-   ellipses <- ams.analysis.eigenvectors(elip_vec1, elip_vec2, elip_vec3)
+   ellipses <- AMSanalysis.eigenvectors(elip_vec1, elip_vec2, elip_vec3)
     #print(tausError)
 
-   return(ams.analysis(tausError, ellipses, stats))
+   return(AMSanalysis(tausError, ellipses, stats))
     #return (list(taus_means=tausError$taus_means,
                  #taus_error=tausError$error,
                  #taus_low=tausError$taus_low,taus_high=tausError$taus_high,ellipses=ellipses,stats=stats))
@@ -86,8 +86,8 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
         poss <- as.integer(meas[,1])
         values <- meas[,2]
 
-        meas_single <- ams.measures.single(positions=poss, values=values)
-        tensor <- ams.sus_tensor(meas_single, setup)
+        meas_single <- AMSmeasures.single(positions=poss, values=values)
+        tensor <- SuscTensor(meas_single, setup)
         if (normalize) {
             tensor <- tensor/sum(diag(tensor))
         }
@@ -95,9 +95,9 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
     }
 
     # suscs return N susceptibility vectors from the N measurements
-    positions <- poss.ams.measures(measures)
-    values <- values.ams.measures(measures)
-    repetitions <- reps.ams.measures(measures)
+    positions <- poss.AMSmeasures(measures)
+    values <- values.AMSmeasures(measures)
+    repetitions <- reps.AMSmeasures(measures)
     suscs <- yysaapply(cbind(positions, values), as.factor(repetitions), susc_nvec)
 
     # eigen_param_v calculates the eigenparameters for R mean_susc.
@@ -124,7 +124,7 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
         error_mean_value <- qnorm(p=1-alpha_margin/2)* desv_st 
         #error_mean_value <- desv_st
 
-        return(ams.analysis.eigenvalues(taus_means=tau_means, taus_errors=error_mean_value))
+        return(AMSanalysis.eigenvalues(taus_means=tau_means, taus_errors=error_mean_value))
         #return(list(taus=tau_means, errors= error_mean_value))
 
 }
@@ -152,7 +152,7 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
 
     # TODO: Too naive. It does not provide a generally righ result for the confidence level. Actually, the confidence level is not even considered.
     # TODO: provide a general statistical method, under some simple asumptions (like normaliy), more similar to what is done fr hext.
-    test <- ams.analysis.anisotropy_test(high_error_tau2 < low_error_tau1, high_error_tau3 < low_error_tau2, high_error_tau3 < low_error_tau1)
+    test <- AMSanalysis.anisotropy_test(high_error_tau2 < low_error_tau1, high_error_tau3 < low_error_tau2, high_error_tau3 < low_error_tau1)
 
     return(test)
     

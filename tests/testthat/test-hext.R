@@ -5,7 +5,7 @@ load('backwards-data.rda')
 alpha <- 0.9
 
 test_that("Hext method is backwards compatible", {
-          setup <- ams.setup()
+          setup <- AMSsetup()
 
           for (i in 1:3) {
               for (j in 1:4) {

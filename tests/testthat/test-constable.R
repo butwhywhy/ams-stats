@@ -6,7 +6,7 @@ alpha <- 0.9
 
 test_that("Bootstrap method is backwards compatible", {
           R <- 100
-          setup <- ams.setup()
+          setup <- AMSsetup()
 
           for (i in 1:3) {
               for (j in 1:4) {
