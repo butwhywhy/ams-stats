@@ -14,6 +14,6 @@ Generates a normal noise generator for use in \code{FakeMeasures} function.
 \examples{
 # Normal error distribution function for synthetic AMS measures with
 # standard debiation 0.1
-error_dist <- NormalErrorGenerator(0.1)
+error.dist <- NormalErrorGenerator(0.1)
 }
 

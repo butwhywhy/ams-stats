@@ -3,7 +3,7 @@
 \alias{AMSsetup}
 \title{Constructs a AMS experiment setup}
 \usage{
-AMSsetup(setup.matrix = .__mat_D_default)
+AMSsetup(setup.matrix = kSetupMatrixDefault)
 }
 \arguments{
 \item{setup.matrix}{Numeric matrix.}

@@ -3,19 +3,19 @@
 \alias{AMSsimulations}
 \title{Performs simultations of AMS statistics analysis}
 \usage{
-AMSsimulations(methods, sus_matrix, n_measurements, error_dist,
+AMSsimulations(methods, suscept.matrix, nmeasures, error.dist,
   setup = AMSsetup(), ...)
 }
 \arguments{
 \item{methods}{A character vector. The names of the AMS analysis methods
 to be simulated.}
 
-\item{sus_matrix}{Numeric 3x3 symmetric matrix.}
+\item{suscept.matrix}{Numeric 3x3 symmetric matrix.}
 
-\item{n_measurements}{Integer. Number of repetitions of the simulated
+\item{nmeasures}{Integer. Number of repetitions of the simulated
 experimental measures.}
 
-\item{error_dist}{A function for simulating the experimental errors,
+\item{error.dist}{A function for simulating the experimental errors,
 as in \code{FakeMeasures}.}
 
 \item{setup}{Object of class \code{AMSsetup}.}
@@ -32,9 +32,9 @@ Performs simultations of AMS statistics analysis
 suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
 
 AMSsimulations(methods = c('ams.hext', 'ams.constable'),
-             sus_matrix = suscep0,
-             n_measurements = 10,
-             error_dist = NormalErrorGenerator(0.3),
+             suscept.matrix = suscep0,
+             nmeasures = 10,
+             error.dist = NormalErrorGenerator(0.3),
              setup = AMSsetup())
 }
 

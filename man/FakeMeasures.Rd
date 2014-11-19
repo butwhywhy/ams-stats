@@ -3,15 +3,15 @@
 \alias{FakeMeasures}
 \title{Generates a synthetic AMS measurements object}
 \usage{
-FakeMeasures(sus_matrix, n_measurements, error_dist, setup = AMSsetup())
+FakeMeasures(suscept.matrix, nmeasures, error.dist, setup = AMSsetup())
 }
 \arguments{
-\item{sus_matrix}{Nueric 3x3 symetric matrix.}
+\item{suscept.matrix}{Nueric 3x3 symetric matrix.}
 
-\item{n_measurements}{Integer. The number of repetitions of the
+\item{nmeasures}{Integer. The number of repetitions of the
 simulated experimental protocol.}
 
-\item{error_dist}{A function accepting two arguments and returning a matrix.
+\item{error.dist}{A function accepting two arguments and returning a matrix.
 It must accept a numeric vector as the first argument and an integer
 as the second one, and return an \code{n} times \code{m} numeric
 matrix, being \code{n} the length of its first argument and \code{m}
@@ -25,15 +25,15 @@ Generates a synthetic AMS measurements object
 }
 \examples{
 # Reference ('real') susceptibility matrix
-sus_matrix <- matrix(c(1.6,.5,.3, .5,1.3,.6, .3,.6,1.9), nrow = 3)
-sus_matrix
+suscept.matrix <- matrix(c(1.6,.5,.3, .5,1.3,.6, .3,.6,1.9), nrow = 3)
+suscept.matrix
 
 # Simulated error distribution with standard deviation 0.5
-error_dist <- NormalErrorGenerator(0.5)
+error.dist <- NormalErrorGenerator(0.5)
 # Experimental setup object
 setup <- AMSsetup()
 
 # Fake AMS measurements object with 2 repetitions
-FakeMeasures(sus_matrix, 2, error_dist, setup)
+FakeMeasures(suscept.matrix, 2, error.dist, setup)
 }
 

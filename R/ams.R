@@ -1,6 +1,6 @@
 #source('utils.R')
 
-.__vec_Aux<-c(.5, .5, 0, -1, 0, 0,
+kVectorDefaultAux <-c(.5, .5, 0, -1, 0, 0,
               .5, .5, 0, 1, 0, 0,
               1, 0, 0, 0, 0, 0,
               .5, .5, 0, -1, 0, 0,
@@ -17,7 +17,7 @@
               .5, 0, .5, 0, 0, 1
               )
 
-.__vec_Aux6x6 <- c(1, 0, 0, 0, 0, 0,
+kVector6x6Aux <- c(1, 0, 0, 0, 0, 0,
                    0, 1, 0, 0, 0, 0,
                    0, 0, 1, 0, 0, 0,
                    .5, .5, 0, 1, 0, 0,
@@ -25,9 +25,9 @@
                    .5, 0, .5, 0, 0, 1
                    )
 
-.__mat_D_6x6 <-matrix(.__vec_Aux6x6, 6, 6, byrow=T)
+kSetupMatrix6x6 <-matrix(kVector6x6Aux, 6, 6, byrow=T)
 
-.__mat_D_default <-matrix(.__vec_Aux, 15, 6, byrow=T)
+kSetupMatrixDefault <-matrix(kVectorDefaultAux , 15, 6, byrow=T)
 
 #' Constructs a AMS experiment setup
 #'
@@ -36,7 +36,7 @@
 #' @examples
 #' setup <- AMSsetup()
 #' class(setup)
-AMSsetup <- function(setup.matrix=.__mat_D_default) {
+AMSsetup <- function(setup.matrix=kSetupMatrixDefault) {
     if (ncol(setup.matrix) != 6) {
         stop("Illegal argument: setup matrix must have 6 columns")
     }
@@ -216,7 +216,7 @@ SuscTensor <- function(measures, setup){
 }
 
 
-AMSmeasures.exact <- function(sus_tensor, setup, positions = NULL) {
+AMSmeasures.exact <- function(suscept.matrix, setup, positions = NULL) {
     D_setup <- design_matrix(setup)
     if (is.null(positions)) {
         positions <- 1:nrow(D_setup)
@@ -232,23 +232,23 @@ AMSmeasures.exact <- function(sus_tensor, setup, positions = NULL) {
     }
 
     D <- .__repeatD(D_setup, positions)
-    vec <- symtensor2vector(sus_tensor)
+    vec <- symtensor2vector(suscept.matrix)
 
     values <- D %*% vec
     return(AMSmeasures(values=values, positions=positions, repetitions=as.integer(reps)))
 }
 
-AMSanalysis <- function(eigenvalues, eigenvectors, anisotropy_test) {
+AMSanalysis <- function(eigenvalues, eigenvectors, anisotropy.test) {
     if (!inherits(eigenvalues, 'AMSanalysis.eigenvalues')) {
         stop('eigenvalues must be of class AMSanalysis.eigenvalues')
     }
     if (!inherits(eigenvectors, 'AMSanalysis.eigenvectors')) {
         stop('eigenvectors must be of class AMSanalysis.eigenvectors')
     }
-    if (!inherits(anisotropy_test, 'AMSanalysis.anisotropy_test')) {
+    if (!inherits(anisotropy.test, 'AMSanalysis.anisotropy_test')) {
         stop('anisoropy_test must be of class ams.analyisis.anisotropy_test')
     }
-    results <- list(eigenvalues=eigenvalues, eigenvectors=eigenvectors, anisotropy_test=anisotropy_test)
+    results <- list(eigenvalues=eigenvalues, eigenvectors=eigenvectors, anisotropy_test=anisotropy.test)
     class(results) <- c('AMSanalysis', class(results))
     return(results)
 }

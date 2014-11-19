@@ -52,9 +52,9 @@ suscep_matrix <- function(lamb_vector, rot_vector=c(0,0,0)) {
 
     # Susceptibility matrix
 
-         sus_matrix <- t(rot_matrix) %*% lamb_matrix %*% rot_matrix
+         suscept.matrix <- t(rot_matrix) %*% lamb_matrix %*% rot_matrix
 
-    return(sus_matrix)
+    return(suscept.matrix)
 }
 
 # Transform a 3x3 symmetric tensor to a 6-vector representation.

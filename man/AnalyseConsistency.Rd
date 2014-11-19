@@ -4,19 +4,19 @@
 \title{Studies the consistency of AMS analysis methods
 using syntetic data.}
 \usage{
-AnalyseConsistency(methods, sus_matrix, n_measurements, error_dist,
-  m_iterations, setup = AMSsetup(), ...)
+AnalyseConsistency(methods, suscept.matrix, nmeasures, error.dist, m_iterations,
+  setup = AMSsetup(), ...)
 }
 \arguments{
 \item{methods}{A character vector. The names of the AMS analysis methods
 to be simulated.}
 
-\item{sus_matrix}{Numeric 3x3 symmetric matrix.}
+\item{suscept.matrix}{Numeric 3x3 symmetric matrix.}
 
-\item{n_measurements}{Integer. Number of repetitions of the simulated
+\item{nmeasures}{Integer. Number of repetitions of the simulated
 experimental measures.}
 
-\item{error_dist}{A function for simulating the experimental errors,
+\item{error.dist}{A function for simulating the experimental errors,
 as in \code{FakeMeasures}.}
 
 \item{m_iterations}{Integer. The number of the repetitions of the whole
@@ -38,9 +38,9 @@ using syntetic data.
 suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
 
 AnalyseConsistency(methods = c('ams.hext', 'ams.constable'),
-                 sus_matrix = suscep0,
-                 n_measurements = 5,
-                 error_dist = NormalErrorGenerator(0.3),
+                 suscept.matrix = suscep0,
+                 nmeasures = 5,
+                 error.dist = NormalErrorGenerator(0.3),
                  m_iterations = 10,
                  setup = AMSsetup(),
                  R = 100 # additional parameter for ams.constable method`

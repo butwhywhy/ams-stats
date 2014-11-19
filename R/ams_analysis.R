@@ -6,10 +6,10 @@
 #'
 #' @param methods A character vector. The names of the AMS analysis methods
 #'     to be simulated.
-#' @param sus_matrix Numeric 3x3 symmetric matrix.
-#' @param n_measurements Integer. Number of repetitions of the simulated 
+#' @param suscept.matrix Numeric 3x3 symmetric matrix.
+#' @param nmeasures Integer. Number of repetitions of the simulated 
 #'     experimental measures.
-#' @param error_dist A function for simulating the experimental errors,
+#' @param error.dist A function for simulating the experimental errors,
 #'     as in \code{FakeMeasures}.
 #' @param setup Object of class \code{AMSsetup}.
 #' @param ... Extra arguments to be passed to the functions given in the
@@ -22,16 +22,16 @@
 #' suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
 #' 
 #' AMSsimulations(methods = c('ams.hext', 'ams.constable'), 
-#'              sus_matrix = suscep0,
-#'              n_measurements = 10, 
-#'              error_dist = NormalErrorGenerator(0.3), 
+#'              suscept.matrix = suscep0,
+#'              nmeasures = 10, 
+#'              error.dist = NormalErrorGenerator(0.3), 
 #'              setup = AMSsetup())
-AMSsimulations <- function(methods, sus_matrix,
-                         n_measurements, error_dist, setup=AMSsetup(), ...){
+AMSsimulations <- function(methods, suscept.matrix,
+                         nmeasures, error.dist, setup=AMSsetup(), ...){
 
     extra_args_names <- names(list(...))
 
-    measures <- FakeMeasures(sus_matrix, n_measurements, error_dist)
+    measures <- FakeMeasures(suscept.matrix, nmeasures, error.dist)
     result <- list()
     for (funname in methods) {
         fun <- get(funname)
@@ -57,10 +57,10 @@ AMSsimulations <- function(methods, sus_matrix,
 #'
 #' @param methods A character vector. The names of the AMS analysis methods
 #'     to be simulated.
-#' @param sus_matrix Numeric 3x3 symmetric matrix.
-#' @param n_measurements Integer. Number of repetitions of the simulated 
+#' @param suscept.matrix Numeric 3x3 symmetric matrix.
+#' @param nmeasures Integer. Number of repetitions of the simulated 
 #'     experimental measures.
-#' @param error_dist A function for simulating the experimental errors,
+#' @param error.dist A function for simulating the experimental errors,
 #'     as in \code{FakeMeasures}.
 #' @param m_iterations Integer. The number of the repetitions of the whole
 #'     simulation process, needed to estimate the consistency of the 
@@ -76,19 +76,19 @@ AMSsimulations <- function(methods, sus_matrix,
 #' suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
 #' 
 #' AnalyseConsistency(methods = c('ams.hext', 'ams.constable'), 
-#'                  sus_matrix = suscep0,
-#'                  n_measurements = 5, 
-#'                  error_dist = NormalErrorGenerator(0.3), 
+#'                  suscept.matrix = suscep0,
+#'                  nmeasures = 5, 
+#'                  error.dist = NormalErrorGenerator(0.3), 
 #'                  m_iterations = 10, 
 #'                  setup = AMSsetup(),
 #'                  R = 100 # additional parameter for ams.constable method`
 #'                  )
 AnalyseConsistency <- function(methods, 
-                             sus_matrix,
-                             n_measurements,error_dist,m_iterations, 
+                             suscept.matrix,
+                             nmeasures,error.dist,m_iterations, 
                              setup=AMSsetup(), ...){
 
-    param <- eigen(sus_matrix)
+    param <- eigen(suscept.matrix)
 
     dir_ini <- param$vectors
     eigen_ini <- param$values
@@ -168,8 +168,8 @@ AnalyseConsistency <- function(methods,
  
     for (i in 1:m_iterations) {
 
-        #tesitos <- AMSsimulations(methods, lamb_ini, rot_vec, n_measurements, error_dist, setup, ...)
-        tesitos <- AMSsimulations(methods, sus_matrix, n_measurements, error_dist, setup, ...)
+        #tesitos <- AMSsimulations(methods, lamb_ini, rot_vec, nmeasures, error.dist, setup, ...)
+        tesitos <- AMSsimulations(methods, suscept.matrix, nmeasures, error.dist, setup, ...)
 
         for (funname in methods) {
             results[[funname]] <- updatestats(results[[funname]], tesitos[[funname]])
