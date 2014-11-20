@@ -15,4 +15,7 @@ Constructs a AMS experiment setup
 setup <- AMSsetup()
 class(setup)
 }
+\seealso{
+\code{\link{design.AMSsetup}}
+}
 

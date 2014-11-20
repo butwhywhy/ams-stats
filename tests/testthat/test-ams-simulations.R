@@ -34,7 +34,7 @@ test_that("FakeMeasures works", {
               dist0 <- NormalErrorGenerator(0)
               fake0 <- FakeMeasures(tensor, 1, dist0, setup)
 
-              expect_that(fake0, equals(AMSmeasures.exact(tensor, setup)))
+              expect_that(fake0, equals(ExactMeasures(tensor, setup)))
               expect_that(SuscTensor(fake0, setup), equals(tensor))
 
               fake0_10 <- FakeMeasures(tensor, 10, dist0, setup)

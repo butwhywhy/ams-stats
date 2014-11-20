@@ -102,9 +102,9 @@ AnalyseConsistency <- function(methods,
     updatestats <- function(stats, test_results) {
         stats$totalcount <- stats$totalcount + 1
 
-        eigenvalues <- eigenvalues.AMSanalysis(test_results)
-        eigenvectors <- eigenvectors.AMSanalysis(test_results)
-        anisotropy_test <- anisotropy_test.AMSanalysis(test_results)
+        eigenvalues <- eigenvalues(test_results)
+        eigenvectors <- eigenvectors(test_results)
+        anisotropy.test <- anisotropytest(test_results)
 
         stats$sum_errors_eigenvalues <- stats$sum_errors_eigenvalues + (eigenvalues$taus_high - eigenvalues$taus_low)/2
         stats$sum_errors_etas[1] <- stats$sum_errors_etas[1] + eigenvectors$ellip1$eta
@@ -115,13 +115,13 @@ AnalyseConsistency <- function(methods,
         stats$sum_errors_zetas[2] <- stats$sum_errors_zetas[2] + eigenvectors$ellip2$zeta
         stats$sum_errors_zetas[3] <- stats$sum_errors_zetas[3] + eigenvectors$ellip3$zeta
 
-        if (reject1Eq2(anisotropy_test)) {
+        if (reject1Eq2(anisotropy.test)) {
             stats$reject1Eq2 = stats$reject1Eq2 + 1
         }
-        if (reject2Eq3(anisotropy_test)) {
+        if (reject2Eq3(anisotropy.test)) {
             stats$reject2Eq3 = stats$reject2Eq3 + 1
         }
-        if (reject1Eq2Eq3(anisotropy_test)) {
+        if (reject1Eq2Eq3(anisotropy.test)) {
             stats$reject1Eq2Eq3 = stats$reject1Eq2Eq3 + 1
         }
 

@@ -29,4 +29,8 @@ values <- c(0.86,1.26,1.10,0.86,1.26,1.26,1.26,1.02,1.26,1.26,0.80,1.80,
 # Construct AMS measures object
 AMSmeasures(reps, poss, values)
 }
+\seealso{
+\code{\link{as.AMSmeasures}}; \code{\link{reps.AMSmeasures}},
+    \code{\link{poss.AMSmeasures}}, \code{\link{values.AMSmeasures}}
+}
 

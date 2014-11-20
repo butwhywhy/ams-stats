@@ -33,7 +33,7 @@ FakeMeasures <- function(suscept.matrix, nmeasures, error.dist, setup=AMSsetup()
     # with n_measures rows and length(real_k) columns, where every column containes noisy 
     # measures from a single real measure
 
-    setup_matrix <- design_matrix(setup)
+    setup_matrix <- design(setup)
     position_number <- nrow(setup_matrix)
 
     # Susceptibility column vector with the 6 independent coefficients

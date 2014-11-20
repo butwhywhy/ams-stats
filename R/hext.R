@@ -67,7 +67,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
     #suscHext, susceptibility matrix
     suscHext <- SuscTensor(measures,setup)
 
-    measur_fit <- AMSmeasures.exact(suscHext,setup,positions)
+    measur_fit <- ExactMeasures(suscHext,setup,positions)
 
     # resid, is a vector with the residuals
 
@@ -104,7 +104,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
 
     xb <- (suscHext[1,1] + suscHext[2,2] + suscHext[3,3])/3
 
-    D_setup <- design_matrix(setup)
+    D_setup <- design(setup)
     V <- solve(t(D_setup) %*% D_setup)
 
     return (list(eig_param=eig_param,varianza=vari,xb=xb, V=V))
@@ -114,7 +114,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
 
 .__errors_taus <- function(eig_param,vari,positions_V,N, alpha, withoutN=F){
     
-    #D_setup <- design_matrix(setup)
+    #D_setup <- design(setup)
 
     #print(D_setup)
     #positions_V <- solve(t(D_setup) %*% D_setup)
@@ -143,7 +143,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
 
     error_taus <- c(error_tau1, error_tau2, error_tau3)
 
-    return(AMSanalysis.eigenvalues(taus_means=eig_param$values, taus_errors=error_taus))
+    return(EigenvaluesCI(taus_means=eig_param$values, taus_errors=error_taus))
     #return(list(taus=eig_param$values, error=error_taus))
 
    }
@@ -165,9 +165,9 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
     
     coor_polar <- car2sph(t(param$vectors))
 
-    ellip1 <- spherical_ellipse(centerDir=coor_polar[1,], axis1Dir=coor_polar[2,], axis2Dir=coor_polar[3,], semiangle1=eli12, semiangle2=eli13)
-    ellip2 <- spherical_ellipse(centerDir=coor_polar[2,], axis1Dir=coor_polar[1,], axis2Dir=coor_polar[3,], semiangle1=eli12, semiangle2=eli23)
-    ellip3 <- spherical_ellipse(centerDir=coor_polar[3,], axis1Dir=coor_polar[1,], axis2Dir=coor_polar[2,], semiangle1=eli13, semiangle2=eli23)
+    ellip1 <- SpherEllipse(centerDir=coor_polar[1,], axis1Dir=coor_polar[2,], axis2Dir=coor_polar[3,], semiangle1=eli12, semiangle2=eli13)
+    ellip2 <- SpherEllipse(centerDir=coor_polar[2,], axis1Dir=coor_polar[1,], axis2Dir=coor_polar[3,], semiangle1=eli12, semiangle2=eli23)
+    ellip3 <- SpherEllipse(centerDir=coor_polar[3,], axis1Dir=coor_polar[1,], axis2Dir=coor_polar[2,], semiangle1=eli13, semiangle2=eli23)
     #elip_vec1 <- list(eta=eli12, zeta=eli13, edir=coor_polar[2,],zdir=coor_polar[3,], center=coor_polar[1,])
 #
     #elip_vec2 <- list(eta=eli12, zeta=eli23, edir=coor_polar[1,], zdir=coor_polar[3,],center=coor_polar[2,])
@@ -175,7 +175,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
     #elip_vec3 <- list(eta=eli13, zeta=eli23, edir=coor_polar[1,], zdir=coor_polar[2,],center=coor_polar[3,])
 #
     #return (list(elip_vec1=elip_vec1, elip_vec2=elip_vec2, elip_vec3=elip_vec3))
-    return(AMSanalysis.eigenvectors(ellip1, ellip2, ellip3))
+    return(EigenvectorsCR(ellip1, ellip2, ellip3))
 }
 
 # .__statHext takes the eigenvalues, the variance and the trace determines if the anisotropy of magnetic susceptibility (prolate, oblate)
@@ -200,7 +200,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
         rF23 <- F23 > qF2
         rFh <- Fh > qF5
 
-        test <- AMSanalysis.anisotropy_test(rF12, rF23, rFh)
+        test <- AnisotropyTest(rF12, rF23, rFh)
     } else {##new
         a1 <- a_tensor(vec1, vec1)
         a2 <- a_tensor(vec2, vec2)
@@ -216,7 +216,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
         rF12 <- F12 > qTN
         rF23 <- F23 > qTN
         rF13 <- F13 > qTN
-        test <- AMSanalysis.anisotropy_test(rF12, rF23, rF13)
+        test <- AnisotropyTest(rF12, rF23, rF13)
     }
     return(test)
 

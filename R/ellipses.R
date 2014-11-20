@@ -7,7 +7,7 @@
 # semiangles, called eta and zeta. 'elip$eta' and 'elip$zeta' are the value of 
 # the two semiangles. All angular magnitudes in radians.
 
-spherical_ellipse <- function(centerDir, axis1Dir, axis2Dir, semiangle1, semiangle2) {
+SpherEllipse <- function(centerDir, axis1Dir, axis2Dir, semiangle1, semiangle2) {
     center <- .__toNorth(centerDir)
     if (semiangle1 > semiangle2) {
         eta <- semiangle1
@@ -21,7 +21,7 @@ spherical_ellipse <- function(centerDir, axis1Dir, axis2Dir, semiangle1, semiang
         zdir <- .__toNorth(axis1Dir) 
     }
     ellip <- list(center=center, eta=eta, zeta=zeta, edir=edir, zdir=zdir)
-    class(ellip) <- c('spherical_ellipse', class(ellip))
+    class(ellip) <- c('SpherEllipse', class(ellip))
     return(ellip)
 }
 

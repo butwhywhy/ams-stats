@@ -67,7 +67,7 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
 
     # ellipses is a list with all ellipse's parameters for the three means vectors
    #ellipses <- list(elip_vec1=elip_vec1, elip_vec2=elip_vec2, elip_vec3=elip_vec3) 
-   ellipses <- AMSanalysis.eigenvectors(elip_vec1, elip_vec2, elip_vec3)
+   ellipses <- EigenvectorsCR(elip_vec1, elip_vec2, elip_vec3)
     #print(tausError)
 
    return(AMSanalysis(tausError, ellipses, stats))
@@ -86,7 +86,7 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
         poss <- as.integer(meas[,1])
         values <- meas[,2]
 
-        meas_single <- AMSmeasures.single(positions=poss, values=values)
+        meas_single <- SingleMeasure(positions=poss, values=values)
         tensor <- SuscTensor(meas_single, setup)
         if (normalize) {
             tensor <- tensor/sum(diag(tensor))
@@ -97,7 +97,7 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
     # suscs return N susceptibility vectors from the N measurements
     positions <- poss.AMSmeasures(measures)
     values <- values.AMSmeasures(measures)
-    repetitions <- reps.AMSmeasures(measures)
+    repetitions <- reps(measures)
     suscs <- yysaapply(cbind(positions, values), as.factor(repetitions), susc_nvec)
 
     # eigen_param_v calculates the eigenparameters for R mean_susc.
@@ -124,7 +124,7 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
         error_mean_value <- qnorm(p=1-alpha_margin/2)* desv_st 
         #error_mean_value <- desv_st
 
-        return(AMSanalysis.eigenvalues(taus_means=tau_means, taus_errors=error_mean_value))
+        return(EigenvaluesCI(taus_means=tau_means, taus_errors=error_mean_value))
         #return(list(taus=tau_means, errors= error_mean_value))
 
 }
@@ -152,7 +152,7 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
 
     # TODO: Too naive. It does not provide a generally righ result for the confidence level. Actually, the confidence level is not even considered.
     # TODO: provide a general statistical method, under some simple asumptions (like normaliy), more similar to what is done fr hext.
-    test <- AMSanalysis.anisotropy_test(high_error_tau2 < low_error_tau1, high_error_tau3 < low_error_tau2, high_error_tau3 < low_error_tau1)
+    test <- AnisotropyTest(high_error_tau2 < low_error_tau1, high_error_tau3 < low_error_tau2, high_error_tau3 < low_error_tau1)
 
     return(test)
     
@@ -221,7 +221,7 @@ kent_parameters <- function(nvectors, ref_vector, n=1, alpha) {
     zdir = car2sph(gamma_mat[1,2], gamma_mat[2,2], gamma_mat[3,2])
 
     #return(list(eta=eta, zeta=zeta, edir=edir, zdir=zdir, center=car2sph(t(mean_vec))))
-    return(spherical_ellipse(centerDir=car2sph(t(mean_vec)), axis1Dir=edir, axis2Dir=zdir, semiangle1=eta, semiangle2=zeta))
+    return(SpherEllipse(centerDir=car2sph(t(mean_vec)), axis1Dir=edir, axis2Dir=zdir, semiangle1=eta, semiangle2=zeta))
 }
 
 .__closest_vect <- function(vects, ref) {

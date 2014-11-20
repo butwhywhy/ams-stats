@@ -36,11 +36,11 @@ mat_D_default <-matrix(vec_Aux, 15, 6, byrow=T)
 test_that("AMSsetup constructor works", {
           default <- AMSsetup()
           expect_that(default, is_a('AMSsetup'))
-          expect_that(design_matrix(default), is_identical_to(mat_D_default))
+          expect_that(design(default), is_identical_to(mat_D_default))
 
           setup6x6 <- AMSsetup(setup.matrix = mat_D_6x6)
           expect_that(setup6x6, is_a('AMSsetup'))
-          expect_that(design_matrix(setup6x6), is_identical_to(mat_D_6x6))
+          expect_that(design(setup6x6), is_identical_to(mat_D_6x6))
 })
 
 test_that("AMSmeasures constructors works", {
@@ -60,7 +60,7 @@ test_that("AMSmeasures constructors works", {
 
 test_that("estimation of AMS tensor and generation of exact measures are consistent", {
           check_consistent <- function(tensor, setup=AMSsetup()) {
-              measures <- AMSmeasures.exact(tensor, setup)
+              measures <- ExactMeasures(tensor, setup)
               tensor2 <- SuscTensor(measures, setup)
               expect_that(tensor2, equals(tensor))
           }
