@@ -298,18 +298,18 @@ AMSanalysis <- function(eigenvalues, eigenvectors, anisotropy.test) {
     return(results)
 }
 
-EigenvaluesCI <- function(taus_means, taus_errors, taus_low=NULL, taus_high=NULL) {
+EigenvaluesCI <- function(eigenvalues, errors, lower.limits=NULL, upper.limits=NULL) {
     # Eigenvalues confidence intervals
-    if (is.null(taus_errors) && (is.null(taus_low) || is.null(taus_high))) {
-        stop('if taus_low or taus_high are not given, taus_errors must be given')
+    if (is.null(errors) && (is.null(lower.limits) || is.null(upper.limits))) {
+        stop('if lower.limits or upper.limits are not given, errors must be given')
     }
-    if (is.null(taus_low)) {
-        taus_low <- taus_means - taus_errors
+    if (is.null(lower.limits)) {
+        lower.limits <- eigenvalues - errors
     }
-    if (is.null(taus_high)) {
-        taus_high <- taus_means + taus_errors
+    if (is.null(upper.limits)) {
+        upper.limits <- eigenvalues + errors
     }
-    taus <- list(taus_means=taus_means, taus_low=taus_low, taus_high=taus_high)
+    taus <- list(eigenvalues=eigenvalues, lower.limits=lower.limits, upper.limits=upper.limits)
     class(taus) <- c('EigenvaluesCI', class(taus))
     return(taus)
 }
@@ -330,12 +330,12 @@ eigenvalues.AMSanalysis <- function(analysis) {
     return(analysis$eigenvalues)
 }
     
-EigenvectorsCR <- function(conf_ellipse1, conf_ellipse2, conf_ellipse3) {
+EigenvectorsCR <- function(conf.ellipse1, conf.ellipse2, conf.ellipse3) {
     # Eigenvectors confidence regions
-    if (! (inherits(conf_ellipse1, 'SpherEllipse') && inherits(conf_ellipse2, 'SpherEllipse') && inherits(conf_ellipse3, 'SpherEllipse'))) {
+    if (! (inherits(conf.ellipse1, 'SpherEllipse') && inherits(conf.ellipse2, 'SpherEllipse') && inherits(conf.ellipse3, 'SpherEllipse'))) {
         stop('arguments must be of class SpherEllipse')
     }
-    vec_ellipse <- list(ellip1=conf_ellipse1, ellip2=conf_ellipse2, ellip3=conf_ellipse3)
+    vec_ellipse <- list(ellip1=conf.ellipse1, ellip2=conf.ellipse2, ellip3=conf.ellipse3)
     class(vec_ellipse) <- c('EigenvectorsCR', class(vec_ellipse))
     return(vec_ellipse)
 }
@@ -360,15 +360,15 @@ eigenvectors.AMSanalysis <- function(analysis) {
     return(analysis$eigenvectors)
 }
     
-.__reject12 <- 'reject tau1=tau2'
-.__reject23 <- 'reject tau2=tau3'
-.__reject123 <- 'reject tau1=tau2=tau3'
+kRejectOblate <- 'reject tau1=tau2'
+kRejectProlate <- 'reject tau2=tau3'
+kRejectIsotropy <- 'reject tau1=tau2=tau3'
 
 AnisotropyTest <- function(higherLTmedium, mediumLTlower, higherLTlower) {
     somedistinct <- higherLTmedium || mediumLTlower || higherLTlower
     test <- c(higherLTmedium, mediumLTlower, somedistinct)
     class(test) <- c('AnisotropyTest', class(test))
-    names(test) <- c(.__reject12, .__reject23, .__reject123)
+    names(test) <- c(kRejectOblate, kRejectProlate, kRejectIsotropy)
     return(test)
 }
 
@@ -393,31 +393,19 @@ anisotropytest.AMSanalysis <- function(analysis) {
     return(analysis$anisotropy_test)
 }
 
-reject1Eq2 <- function(anisotropy_test) {
-    return(anisotropy_test[.__reject12])
-}
-
-reject2Eq3 <- function(anisotropy_test) {
-    return(anisotropy_test[.__reject23])
-}
-
-reject1Eq2Eq3 <- function(anisotropy_test) {
-    return(anisotropy_test[.__reject123])
-}
-
 #' @export
 print.AnisotropyTest <- function(x, ...) {
     print.default(unclass(x), ...)
-    if (!x[.__reject123]) {
+    if (!x[kRejectIsotropy]) {
         print('Isotropy hypothesis not rejected', ...)
     } else {
         print('Anisotropy', ...)
-        if ((x[.__reject12] && x[.__reject23])
-            || (!x[.__reject12] && !x[.__reject23])) {
+        if ((x[kRejectOblate] && x[kRejectProlate])
+            || (!x[kRejectOblate] && !x[kRejectProlate])) {
             print('Shape not well defined', ...)
-        } else if (x[.__reject12]) {
+        } else if (x[kRejectOblate]) {
             print('Shape: prolate', ...)
-        } else if (x[.__reject23]) {
+        } else if (x[kRejectProlate]) {
             print('Shape: oblate', ...)
         } else {
             stop('assertion error')
@@ -425,7 +413,10 @@ print.AnisotropyTest <- function(x, ...) {
     }
 }
 
-eigenvectors2ellipsoid_parameters <- function(tau1, tau2, tau3) {
+# TODO export and document eigenParams2ellipsoidParams and ellipsoidParams2eigenParams
+
+# tau1 >= tau2 >= tau3
+eigenParams2ellipsoidParams <- function(tau1, tau2, tau3) {
     mean <- (tau1 + tau2 + tau3) / 3
     P <- tau1 / tau3
     U <- (2 * tau2 - tau1 - tau3) / (tau1 - tau3)
@@ -434,7 +425,7 @@ eigenvectors2ellipsoid_parameters <- function(tau1, tau2, tau3) {
     return(result)
 }
 
-ellipsoid_parameters2eigenvectors <- function(mean, P, U) {
+ellipsoidParams2eigenParams <- function(mean, P, U) {
     tau1 <- 6 * P * mean / (U * (P-1) + 3 * (P+1))
     tau3 <- 6 * mean / (U * (P-1) + 3 * (P+1))
     tau2 <- 3 * mean * (1 - 2 * (P+1) / (U * (P-1) + 3 * (P+1)))

@@ -49,11 +49,11 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
 
     tausError <- .__error_taus(cons_eig_para$t[,c(1,2,3)], alpha) 
 
-    #taus_low <- tausError$taus - tausError$error
+    #lower.limits <- tausError$taus - tausError$error
 #
-    #taus_high <- tausError$taus + tausError$error
+    #upper.limits <- tausError$taus + tausError$error
 #
-    stats <- .__stat_boot(tausError$taus_low, tausError$taus_high)
+    stats <- .__stat_boot(tausError$lower.limits, tausError$upper.limits)
 
     vec1 <- t(cons_eig_para$t[,c(4,5,6)])
     vec2 <- t(cons_eig_para$t[,c(7,8,9)])
@@ -71,9 +71,9 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
     #print(tausError)
 
    return(AMSanalysis(tausError, ellipses, stats))
-    #return (list(taus_means=tausError$taus_means,
+    #return (list(eigenvalues=tausError$eigenvalues,
                  #taus_error=tausError$error,
-                 #taus_low=tausError$taus_low,taus_high=tausError$taus_high,ellipses=ellipses,stats=stats))
+                 #lower.limits=tausError$lower.limits,upper.limits=tausError$upper.limits,ellipses=ellipses,stats=stats))
 
 }
  
@@ -124,7 +124,7 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
         error_mean_value <- qnorm(p=1-alpha_margin/2)* desv_st 
         #error_mean_value <- desv_st
 
-        return(EigenvaluesCI(taus_means=tau_means, taus_errors=error_mean_value))
+        return(EigenvaluesCI(eigenvalues=tau_means, errors=error_mean_value))
         #return(list(taus=tau_means, errors= error_mean_value))
 
 }

@@ -96,7 +96,7 @@ AnalyseConsistency <- function(methods,
     #print(eigen_ini)
 
     initstats <- function() {
-        list(totalcount=0, consistent_eigenvalues=c(0,0,0), consistent_eigenvectors=c(0,0,0), sum_errors_eigenvalues=c(0,0,0), sum_errors_etas=c(0,0,0), sum_errors_zetas=c(0,0,0), reject1Eq2=0, reject2Eq3=0, reject1Eq2Eq3=0)
+        list(totalcount=0, consistent_eigenvalues=c(0,0,0), consistent_eigenvectors=c(0,0,0), sum_errors_eigenvalues=c(0,0,0), sum_errors_etas=c(0,0,0), sum_errors_zetas=c(0,0,0), reject.oblate=0, reject.prolate=0, reject.isotropy=0)
     }
 
     updatestats <- function(stats, test_results) {
@@ -106,7 +106,7 @@ AnalyseConsistency <- function(methods,
         eigenvectors <- eigenvectors(test_results)
         anisotropy.test <- anisotropytest(test_results)
 
-        stats$sum_errors_eigenvalues <- stats$sum_errors_eigenvalues + (eigenvalues$taus_high - eigenvalues$taus_low)/2
+        stats$sum_errors_eigenvalues <- stats$sum_errors_eigenvalues + (eigenvalues$upper.limits - eigenvalues$lower.limits)/2
         stats$sum_errors_etas[1] <- stats$sum_errors_etas[1] + eigenvectors$ellip1$eta
         stats$sum_errors_etas[2] <- stats$sum_errors_etas[2] + eigenvectors$ellip2$eta
         stats$sum_errors_etas[3] <- stats$sum_errors_etas[3] + eigenvectors$ellip3$eta
@@ -115,14 +115,14 @@ AnalyseConsistency <- function(methods,
         stats$sum_errors_zetas[2] <- stats$sum_errors_zetas[2] + eigenvectors$ellip2$zeta
         stats$sum_errors_zetas[3] <- stats$sum_errors_zetas[3] + eigenvectors$ellip3$zeta
 
-        if (reject1Eq2(anisotropy.test)) {
-            stats$reject1Eq2 = stats$reject1Eq2 + 1
+        if (anisotropy.test[kRejectOblate]) {
+            stats$reject.oblate = stats$reject.oblate + 1
         }
-        if (reject2Eq3(anisotropy.test)) {
-            stats$reject2Eq3 = stats$reject2Eq3 + 1
+        if (anisotropy.test[kRejectProlate]) {
+            stats$reject.prolate = stats$reject.prolate + 1
         }
-        if (reject1Eq2Eq3(anisotropy.test)) {
-            stats$reject1Eq2Eq3 = stats$reject1Eq2Eq3 + 1
+        if (anisotropy.test[kRejectIsotropy]) {
+            stats$reject.isotropy = stats$reject.isotropy + 1
         }
 
         if (.__isConsist_tau1(eigen_ini[1], eigenvalues)) {
@@ -154,9 +154,9 @@ AnalyseConsistency <- function(methods,
                              mean_error_eigenvalues=sum_errors_eigenvalues/totalcount, 
                              mean_error_eta_eigenvectors=sum_errors_etas/totalcount, 
                              mean_error_zeta_eigenvectors=sum_errors_zetas/totalcount, 
-                             perc_rejected_1Eq2=reject1Eq2/totalcount, 
-                             perc_rejected_2Eq3=reject2Eq3/totalcount, 
-                             perc_rejected_1Eq2Eq3=reject1Eq2Eq3/totalcount))
+                             perc_rejected_1Eq2=reject.oblate/totalcount, 
+                             perc_rejected_2Eq3=reject.prolate/totalcount, 
+                             perc_rejected_1Eq2Eq3=reject.isotropy/totalcount))
         return(results)
     }
 
@@ -185,19 +185,19 @@ AnalyseConsistency <- function(methods,
 
 .__isConsist_tau1 <- function(lamb_ini1,eigenvalues){
 
-   with(eigenvalues, taus_low[1] <= lamb_ini1 && taus_high[1] >= lamb_ini1)
+   with(eigenvalues, lower.limits[1] <= lamb_ini1 && upper.limits[1] >= lamb_ini1)
 
 }
 
 .__isConsist_tau2 <- function(lamb_ini2,eigenvalues){
 
-    with(eigenvalues, taus_low[2] <= lamb_ini2 && taus_high[2] >= lamb_ini2)
+    with(eigenvalues, lower.limits[2] <= lamb_ini2 && upper.limits[2] >= lamb_ini2)
 
 }
 
 .__isConsist_tau3 <- function(lamb_ini3,eigenvalues){
 
-    with(eigenvalues, taus_low[3] <= lamb_ini3 && taus_high[3] >= lamb_ini3)
+    with(eigenvalues, lower.limits[3] <= lamb_ini3 && upper.limits[3] >= lamb_ini3)
 
 }
 

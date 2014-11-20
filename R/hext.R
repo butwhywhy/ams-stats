@@ -39,20 +39,20 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
 
     #print(tausError$taus)
 
-    #taus_low <- tausError$taus-tausError$error
+    #lower.limits <- tausError$taus-tausError$error
 #
-    #taus_high <- tausError$taus+tausError$error
+    #upper.limits <- tausError$taus+tausError$error
 #
     ellipses <- .__errors_vec(param$eig_param, param$varianza, param$xb,nrow(measures),alpha)
 
     #data <- tausError$taus
     #
-    stats <- .__statHext(tausError$taus_means, param$eig_param, param$V, param$varianza, param$xb, nrow(measures), alpha, withoutN)
+    stats <- .__statHext(tausError$eigenvalues, param$eig_param, param$V, param$varianza, param$xb, nrow(measures), alpha, withoutN)
 
     return(AMSanalysis(tausError, ellipses, stats))
-   #return(list(taus_means=tausError$taus_means,
+   #return(list(eigenvalues=tausError$eigenvalues,
                #taus_error=tausError$error,
-               #taus_low=tausError$taus_low, taus_high=tausError$taus_high,ellipses=ellipses,stats=stats))
+               #lower.limits=tausError$lower.limits, upper.limits=tausError$upper.limits,ellipses=ellipses,stats=stats))
 }
 
 # .__hext_param takes a frame with the n measurements and returns a list with a data.frame with the eigenvalues and the eigenvectors, the variance and the trace of susceptibility tensor
@@ -143,7 +143,7 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
 
     error_taus <- c(error_tau1, error_tau2, error_tau3)
 
-    return(EigenvaluesCI(taus_means=eig_param$values, taus_errors=error_taus))
+    return(EigenvaluesCI(eigenvalues=eig_param$values, errors=error_taus))
     #return(list(taus=eig_param$values, error=error_taus))
 
    }
