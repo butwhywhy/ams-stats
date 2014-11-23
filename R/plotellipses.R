@@ -25,8 +25,8 @@ plotellipses <- function(ams_tensor, sigma) {
     symbols <- .__symbols[symbols_index,]
     color <- .__symbols[symbols_index,'color']
     print(.__symbols[symbols_index,'hext_lines'])
-    ellipse_plot(elip=ellipse_hext, add=add, line.col=color, lty=.__symbols[symbols_index,'hext_lines'])
-    ellipse_plot(elip=ellipse_boot, add=T, line.col=color, divideHemispheres=F, lty=.__symbols[symbols_index,'bootstrap_lines'])
+    plot(elip=ellipse_hext, add=add, line.col=color, lty=.__symbols[symbols_index,'hext_lines'])
+    plot(elip=ellipse_boot, add=T, line.col=color, divideHemispheres=F, lty=.__symbols[symbols_index,'bootstrap_lines'])
     lambert.plot(long=ellipse_hext$center[1], lat=ellipse_hext$center[2], divideHemispheres=F, add=T, point.col=color, point.symbols=.__symbols[symbols_index,'hext_symbols'])
     lambert.plot(long=ellipse_boot$center[1], lat=ellipse_boot$center[2], divideHemispheres=F, add=T, point.col=color, point.symbols=.__symbols[symbols_index,'bootstrap_symbols'], bg=.__symbols[symbols_index,'background'])
     lambert.plot(long=expectedCenter[1], lat=expectedCenter[2], divideHemispheres=F, add=T, point.col=color, point.symbols=.__symbols[symbols_index,'original_symbols'])

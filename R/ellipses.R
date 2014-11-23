@@ -1,28 +1,53 @@
-#source('coordinates.R')
 
-# An ellipse in the sphere is described by a list object 'elip' with constituent 
-# elements 'elip$center', 'elip$eta', 'elip$zeta', 'elip$edir', 'elip$zdir'. 
-# Of these, 'elip$center', 'elip$edir', 'elip$zdir', are vectors containing the
-# longitud, latitud and radial coordinates of the center direction and the two
-# semiangles, called eta and zeta. 'elip$eta' and 'elip$zeta' are the value of 
-# the two semiangles. All angular magnitudes in radians.
-
+#' Constructs an spherical ellipse
+#'
+#' An ellipse in the sphere is described by a list object 'elip' with constituent 
+#' elements 'elip$center', 'elip$eta', 'elip$zeta', 'elip$edir', 'elip$zdir'. 
+#' Of these, 'elip$center', 'elip$edir', 'elip$zdir', are vectors containing the
+#' longitud, latitud and radial coordinates of the center direction and the two
+#' semiangles, called eta and zeta. 'elip$eta' and 'elip$zeta' are the value of 
+#' the two semiangles. All angular magnitudes in radians.
+#'
+#' @param centerDir Numeric vector, representing longitud and latitude of the
+#'     center of the ellipse
+#' @param axis1Dir Numeric vector, representing longitud and latitude of the
+#'     first semiaxis of the ellipse
+#' @param axis2Dir Numeric vector, representing longitud and latitude of the
+#'     second semiaxis of the ellipse
+#' @param semiangle1 Numberic value, angular magnitud of the first semiaxis
+#' @param semiangle2 Numberic value, angular magnitud of the second semiaxis
+#' @export
+#' @examples
+#' centerDir <- c(0, pi/2)
+#' axis1Dir <- c(pi/2, 0)
+#' axis2Dir <- c(pi/2, pi/2)
+#' ellipse <- SpherEllipse(centerDir, axis1Dir, axis2Dir, 1/2, 1)
+#' plot(ellipse)
+#'
+#' @seealso \code{\link{plot.SpherEllipse}}
 SpherEllipse <- function(centerDir, axis1Dir, axis2Dir, semiangle1, semiangle2) {
-    center <- .__toNorth(centerDir)
     if (semiangle1 > semiangle2) {
         eta <- semiangle1
-        edir <- .__toNorth(axis1Dir)
+        edir <- axis1Dir
         zeta <- semiangle2
-        zdir <- .__toNorth(axis2Dir) 
+        zdir <- axis2Dir 
     } else {
         eta <- semiangle2
-        edir <- .__toNorth(axis2Dir)
+        edir <- axis2Dir
         zeta <- semiangle1
-        zdir <- .__toNorth(axis1Dir) 
+        zdir <- axis1Dir 
     }
-    ellip <- list(center=center, eta=eta, zeta=zeta, edir=edir, zdir=zdir)
+    ellip <- list(center=centerDir, eta=eta, zeta=zeta, edir=edir, zdir=zdir)
     class(ellip) <- c('SpherEllipse', class(ellip))
     return(ellip)
+}
+
+NorthHemisphEllipse <- function(centerDir, axis1Dir, axis2Dir, semiangle1, semiangle2) {
+    return(SpherEllipse(.__toNorth(centerDir),
+                            .__toNorth(axis1Dir),
+                            .__toNorth(axis2Dir),
+                            semiangle1,
+                            semiangle2))
 }
 
 # The ellipse has a preferred reference system in the sphere, where the center
@@ -71,10 +96,22 @@ ellipse_points <- function(elip, npoints=200) {
     return(points)
 }
 
-# Plots the ellipse 'elip' in Lambert projection. The 'add' parameter indicates
-# if the ellipse should be drawn over an existing plot or on a new one (default).
-ellipse_plot <- function(elip, npoints=200, add=FALSE, line.col='red', ...) {
-    points <- ellipse_points(elip, npoints)
+#' Plot spherical ellipse
+#'
+#' Plots an spherial ellipse in Lambert azimuthal (equal area)
+#' projection. Only the north hemisphere
+#' is represented, directions in the south hemisphere are reverted and
+#' represented in the north pole. 
+#'
+#' @param x An SpherEllipse object
+#' @param npoints The number of points to be plotted, default is 200
+#' @param add Boolean indicating if the plot should be drawn over an existing
+#'     plot (\code{True}) or on a new one (\code{False}, default)
+#' @param line.col The color of the ellipse, default is 'red'
+#' @param ... Other parameters to be passed to \code{\link{lambert.plot}}
+#' @export
+plot.SpherEllipse <- function(x, npoints=200, add=FALSE, line.col='red', ...) {
+    points <- ellipse_points(x, npoints)
     lambert.plot(points[,1], points[,2], rp.type='p', line.col=line.col, add=add, ...)
 }
 

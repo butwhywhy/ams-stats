@@ -4,7 +4,7 @@
 \title{Studies the consistency of AMS analysis methods
 using syntetic data.}
 \usage{
-AnalyseConsistency(methods, suscept.matrix, nmeasures, error.dist, m_iterations,
+AnalyseConsistency(methods, suscept.matrix, nmeasures, error.dist, nrepetitions,
   setup = AMSsetup(), ...)
 }
 \arguments{
@@ -19,7 +19,7 @@ experimental measures.}
 \item{error.dist}{A function for simulating the experimental errors,
 as in \code{FakeMeasures}.}
 
-\item{m_iterations}{Integer. The number of the repetitions of the whole
+\item{nrepetitions}{Integer. The number of the repetitions of the whole
 simulation process, needed to estimate the consistency of the
 AMS analysis methods under study.}
 
@@ -41,7 +41,7 @@ AnalyseConsistency(methods = c('ams.hext', 'ams.constable'),
                  suscept.matrix = suscep0,
                  nmeasures = 5,
                  error.dist = NormalErrorGenerator(0.3),
-                 m_iterations = 10,
+                 nrepetitions = 10,
                  setup = AMSsetup(),
                  R = 100 # additional parameter for ams.constable method`
                  )

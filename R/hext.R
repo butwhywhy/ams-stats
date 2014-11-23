@@ -165,9 +165,9 @@ ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
     
     coor_polar <- car2sph(t(param$vectors))
 
-    ellip1 <- SpherEllipse(centerDir=coor_polar[1,], axis1Dir=coor_polar[2,], axis2Dir=coor_polar[3,], semiangle1=eli12, semiangle2=eli13)
-    ellip2 <- SpherEllipse(centerDir=coor_polar[2,], axis1Dir=coor_polar[1,], axis2Dir=coor_polar[3,], semiangle1=eli12, semiangle2=eli23)
-    ellip3 <- SpherEllipse(centerDir=coor_polar[3,], axis1Dir=coor_polar[1,], axis2Dir=coor_polar[2,], semiangle1=eli13, semiangle2=eli23)
+    ellip1 <- NorthHemisphEllipse(centerDir=coor_polar[1,], axis1Dir=coor_polar[2,], axis2Dir=coor_polar[3,], semiangle1=eli12, semiangle2=eli13)
+    ellip2 <- NorthHemisphEllipse(centerDir=coor_polar[2,], axis1Dir=coor_polar[1,], axis2Dir=coor_polar[3,], semiangle1=eli12, semiangle2=eli23)
+    ellip3 <- NorthHemisphEllipse(centerDir=coor_polar[3,], axis1Dir=coor_polar[1,], axis2Dir=coor_polar[2,], semiangle1=eli13, semiangle2=eli23)
     #elip_vec1 <- list(eta=eli12, zeta=eli13, edir=coor_polar[2,],zdir=coor_polar[3,], center=coor_polar[1,])
 #
     #elip_vec2 <- list(eta=eli12, zeta=eli23, edir=coor_polar[1,], zdir=coor_polar[3,],center=coor_polar[2,])

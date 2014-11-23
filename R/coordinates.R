@@ -84,11 +84,30 @@ lambert_NorthProlongation <- function(rho,long) {
     return(-(pi/2) + colat)
 }
 
-# plots 3-D directions given in spherical coordinates using a lambert 
-# projection. Only the north hemisphere is represented, direcions in the 
-# south hemisphere and reverted and then represented in the north hemisphere.
 
+#' Plot in lambert coordinates
+#'
+#' Plots 3-D directions given in spherical coordinates, longitud and latitud
+#' using a Lambert azimuthal projection (equal area projection). Only the 
+#' north hemisphere is represented, direcions in the south hemisphere and 
+#' reverted and then represented in the north hemisphere.
+#'
 #' @importFrom plotrix polar.plot
+#'
+#' @param long Numeric vector of longitud coordinates in radians
+#' @param lat Numeric vector of latitud coordinates in radians
+#' @param radial.labels Numeric vector of labels of the longitud coordinates,
+#'     in degrees, default is \code{c(90, 60, 30, 0)}
+#' @param add Boolean indicating if the plot should be started from zero,
+#'     removing objectx previously in the plot, default is False
+#' @param rp.type Like in \code{\link{polar.plot}}, default is 's' 
+#'     (symbol)
+#' @param divideHemispheres Boolean value indicating if the plot should be
+#'     divided into blocks of points lying in the same hemisphere, so that
+#'     points in different hemisphere are not joined. Default is True
+#' @param ... Extra parameters to be passed to \code{\link{polar.plot}}
+#'
+#' @export
 lambert.plot <- function(long,lat,radial.labels=c(90,60,30,0),add=F,rp.type='s',divideHemispheres=T,...) {
     #library(plotrix)
     rad_lim <- .__lat2rho(radial.labels*pi/180)

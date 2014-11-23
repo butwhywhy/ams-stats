@@ -1,6 +1,3 @@
-#source('ams.R')
-#source('simulations.R')
-#source('ellipses.R')
 
 #' Performs simultations of AMS statistics analysis
 #'
@@ -62,7 +59,7 @@ AMSsimulations <- function(methods, suscept.matrix,
 #'     experimental measures.
 #' @param error.dist A function for simulating the experimental errors,
 #'     as in \code{FakeMeasures}.
-#' @param m_iterations Integer. The number of the repetitions of the whole
+#' @param nrepetitions Integer. The number of the repetitions of the whole
 #'     simulation process, needed to estimate the consistency of the 
 #'     AMS analysis methods under study.
 #' @param setup Object of class \code{AMSsetup}.
@@ -79,13 +76,13 @@ AMSsimulations <- function(methods, suscept.matrix,
 #'                  suscept.matrix = suscep0,
 #'                  nmeasures = 5, 
 #'                  error.dist = NormalErrorGenerator(0.3), 
-#'                  m_iterations = 10, 
+#'                  nrepetitions = 10, 
 #'                  setup = AMSsetup(),
 #'                  R = 100 # additional parameter for ams.constable method`
 #'                  )
 AnalyseConsistency <- function(methods, 
                              suscept.matrix,
-                             nmeasures,error.dist,m_iterations, 
+                             nmeasures,error.dist,nrepetitions, 
                              setup=AMSsetup(), ...){
 
     param <- eigen(suscept.matrix)
@@ -96,24 +93,24 @@ AnalyseConsistency <- function(methods,
     #print(eigen_ini)
 
     initstats <- function() {
-        list(totalcount=0, consistent_eigenvalues=c(0,0,0), consistent_eigenvectors=c(0,0,0), sum_errors_eigenvalues=c(0,0,0), sum_errors_etas=c(0,0,0), sum_errors_zetas=c(0,0,0), reject.oblate=0, reject.prolate=0, reject.isotropy=0)
+        list(totalcount=0, consistent.eigenvalues=c(0,0,0), consistent.eigenvectors=c(0,0,0), sum.errors.eigenvalues=c(0,0,0), sum.errors.etas=c(0,0,0), sum.errors.zetas=c(0,0,0), reject.oblate=0, reject.prolate=0, reject.isotropy=0)
     }
 
-    updatestats <- function(stats, test_results) {
+    updatestats <- function(stats, test.results) {
         stats$totalcount <- stats$totalcount + 1
 
-        eigenvalues <- eigenvalues(test_results)
-        eigenvectors <- eigenvectors(test_results)
-        anisotropy.test <- anisotropytest(test_results)
+        eigenvalues <- eigenvalues(test.results)
+        eigenvectors <- eigenvectors(test.results)
+        anisotropy.test <- anisotropytest(test.results)
 
-        stats$sum_errors_eigenvalues <- stats$sum_errors_eigenvalues + (eigenvalues$upper.limits - eigenvalues$lower.limits)/2
-        stats$sum_errors_etas[1] <- stats$sum_errors_etas[1] + eigenvectors$ellip1$eta
-        stats$sum_errors_etas[2] <- stats$sum_errors_etas[2] + eigenvectors$ellip2$eta
-        stats$sum_errors_etas[3] <- stats$sum_errors_etas[3] + eigenvectors$ellip3$eta
+        stats$sum.errors.eigenvalues <- stats$sum.errors.eigenvalues + (eigenvalues$upper.limits - eigenvalues$lower.limits)/2
+        stats$sum.errors.etas[1] <- stats$sum.errors.etas[1] + eigenvectors$ellip1$eta
+        stats$sum.errors.etas[2] <- stats$sum.errors.etas[2] + eigenvectors$ellip2$eta
+        stats$sum.errors.etas[3] <- stats$sum.errors.etas[3] + eigenvectors$ellip3$eta
 
-        stats$sum_errors_zetas[1] <- stats$sum_errors_zetas[1] + eigenvectors$ellip1$zeta
-        stats$sum_errors_zetas[2] <- stats$sum_errors_zetas[2] + eigenvectors$ellip2$zeta
-        stats$sum_errors_zetas[3] <- stats$sum_errors_zetas[3] + eigenvectors$ellip3$zeta
+        stats$sum.errors.zetas[1] <- stats$sum.errors.zetas[1] + eigenvectors$ellip1$zeta
+        stats$sum.errors.zetas[2] <- stats$sum.errors.zetas[2] + eigenvectors$ellip2$zeta
+        stats$sum.errors.zetas[3] <- stats$sum.errors.zetas[3] + eigenvectors$ellip3$zeta
 
         if (anisotropy.test[kRejectOblate]) {
             stats$reject.oblate = stats$reject.oblate + 1
@@ -126,37 +123,37 @@ AnalyseConsistency <- function(methods,
         }
 
         if (.__isConsist_tau1(eigen_ini[1], eigenvalues)) {
-            stats$consistent_eigenvalues[1] <- stats$consistent_eigenvalues[1] + 1
+            stats$consistent.eigenvalues[1] <- stats$consistent.eigenvalues[1] + 1
         }
         if (.__isConsist_tau2(eigen_ini[2], eigenvalues)) {
-            stats$consistent_eigenvalues[2] <- stats$consistent_eigenvalues[2] + 1
+            stats$consistent.eigenvalues[2] <- stats$consistent.eigenvalues[2] + 1
         }
         if (.__isConsist_tau3(eigen_ini[3], eigenvalues)) {
-            stats$consistent_eigenvalues[3] <- stats$consistent_eigenvalues[3] + 1
+            stats$consistent.eigenvalues[3] <- stats$consistent.eigenvalues[3] + 1
         }
         if (.__isConsist_vec1(car2sph(t(dir_ini[,1])), eigenvectors)) {
-            stats$consistent_eigenvectors[1] <- stats$consistent_eigenvectors[1] + 1
+            stats$consistent.eigenvectors[1] <- stats$consistent.eigenvectors[1] + 1
         }
         if (.__isConsist_vec2(car2sph(t(dir_ini[,2])), eigenvectors)) {
-            stats$consistent_eigenvectors[2] <- stats$consistent_eigenvectors[2] + 1
+            stats$consistent.eigenvectors[2] <- stats$consistent.eigenvectors[2] + 1
         }
         if (.__isConsist_vec3(car2sph(t(dir_ini[,3])), eigenvectors)) {
-            stats$consistent_eigenvectors[3] <- stats$consistent_eigenvectors[3] + 1
+            stats$consistent.eigenvectors[3] <- stats$consistent.eigenvectors[3] + 1
         }
         return(stats)
     }
 
     closestats <- function(stats) {
         results <- with(stats, 
-                        list(detailed_stats=stats,
-                             perc_consist_eigenvalues=consistent_eigenvalues/totalcount, 
-                             perc_consist_eigenvectors=consistent_eigenvectors/totalcount, 
-                             mean_error_eigenvalues=sum_errors_eigenvalues/totalcount, 
-                             mean_error_eta_eigenvectors=sum_errors_etas/totalcount, 
-                             mean_error_zeta_eigenvectors=sum_errors_zetas/totalcount, 
-                             perc_rejected_1Eq2=reject.oblate/totalcount, 
-                             perc_rejected_2Eq3=reject.prolate/totalcount, 
-                             perc_rejected_1Eq2Eq3=reject.isotropy/totalcount))
+                        list(stats.detail=stats,
+                             fraction.consist.eigenvalues=consistent.eigenvalues/totalcount, 
+                             fraction.consist.eigenvectors=consistent.eigenvectors/totalcount, 
+                             mean.error.eigenvalues=sum.errors.eigenvalues/totalcount, 
+                             mean.error.eta_eigenvectors=sum.errors.etas/totalcount, 
+                             mean.error.zeta_eigenvectors=sum.errors.zetas/totalcount, 
+                             fraction.rejected.oblate=reject.oblate/totalcount, 
+                             fraction.rejected.prolate=reject.prolate/totalcount, 
+                             fraction.rejected.isotropy=reject.isotropy/totalcount))
         return(results)
     }
 
@@ -166,7 +163,7 @@ AnalyseConsistency <- function(methods,
         results[[funname]] <- initstats()
     }
  
-    for (i in 1:m_iterations) {
+    for (i in 1:nrepetitions) {
 
         #tesitos <- AMSsimulations(methods, lamb_ini, rot_vec, nmeasures, error.dist, setup, ...)
         tesitos <- AMSsimulations(methods, suscept.matrix, nmeasures, error.dist, setup, ...)

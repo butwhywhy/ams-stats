@@ -1,10 +1,3 @@
-#source('utils.R')
-#source('ams.R')
-#source('bootstrap.R')
-#source('coordinates.R')
-#source('ellipses.R')
-
-#library('boot')
 
 #' Analyse AMS data using Bootstrap method proposed by Hext.
 #'
@@ -78,7 +71,6 @@ ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
 }
  
 
-#' @importFrom boot boot
 .__constable_eigen_param <- function(measures, setup, R, normalize) {
 
     # susc_nvec takes the susceptibility matrix and returns the susceptibility vector
@@ -221,7 +213,7 @@ kent_parameters <- function(nvectors, ref_vector, n=1, alpha) {
     zdir = car2sph(gamma_mat[1,2], gamma_mat[2,2], gamma_mat[3,2])
 
     #return(list(eta=eta, zeta=zeta, edir=edir, zdir=zdir, center=car2sph(t(mean_vec))))
-    return(SpherEllipse(centerDir=car2sph(t(mean_vec)), axis1Dir=edir, axis2Dir=zdir, semiangle1=eta, semiangle2=zeta))
+    return(NorthHemisphEllipse(centerDir=car2sph(t(mean_vec)), axis1Dir=edir, axis2Dir=zdir, semiangle1=eta, semiangle2=zeta))
 }
 
 .__closest_vect <- function(vects, ref) {
