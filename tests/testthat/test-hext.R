@@ -15,14 +15,14 @@ test_that("Hext method is backwards compatible", {
                   # Hext analysis
                   set.seed(1000001)
                   hext_analysis_name <- paste('hext', i, '_', j, sep = '')
-                  hext_analysis <- ams.hext(measures, setup, 
+                  hext_analysis <- HextAnalyse(measures, setup, 
                                                  alpha = alpha)
                   expect_that(hext_analysis, equals(get(hext_analysis_name)))
 
                   # Hext without N analysis
                   set.seed(1000001)
                   hextwon_analysis_name <- paste('hextwon', i, '_', j, sep = '')
-                  hextwon_analysis <- ams.hext(measures, setup, 
+                  hextwon_analysis <- HextAnalyse(measures, setup, 
                                                alpha = alpha, withoutN = TRUE)
                   expect_that(hextwon_analysis, equals(get(hextwon_analysis_name)))
 

@@ -7,8 +7,8 @@ plotellipses <- function(ams_tensor, sigma) {
     setup <- AMSsetup()
 
     fake <- FakeMeasures(ams_tensor, nmeasures=15, error.dist=NormalErrorGenerator(sigma), setup)
-    result_hext <- ams.hext(fake, setup)
-    result_boot <- ams.constable(fake, setup)
+    result_hext <- HextAnalyse(fake, setup)
+    result_boot <- BootstrapAnalyse(fake, setup)
     .__plot_ellipse(ellipse_hext=result_hext$eigenvectors$ellip1, ellipse_boot=result_boot$eigenvectors$ellip1, expectedCenter=expected[1,], add=F, symbols_index=1)
     .__plot_ellipse(ellipse_hext=result_hext$eigenvectors$ellip2, ellipse_boot=result_boot$eigenvectors$ellip2, expectedCenter=expected[2,], add=T, symbols_index=2)
     .__plot_ellipse(ellipse_hext=result_hext$eigenvectors$ellip3, ellipse_boot=result_boot$eigenvectors$ellip3, expectedCenter=expected[3,], add=T, symbols_index=3)

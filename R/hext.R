@@ -24,9 +24,9 @@
 #' 
 #' # Estimate AMS parameters and confidence intervals with 0.99 confidence 
 #' # level
-#' ams.hext(measures, setup, alpha = 0.99)
+#' HextAnalyse(measures, setup, alpha = 0.99)
 #'
-ams.hext <- function(measures, setup, alpha=0.95, withoutN=F){
+HextAnalyse <- function(measures, setup, alpha=0.95, withoutN=F){
 
     param <- .__hext_param(measures,setup, withoutN)
 

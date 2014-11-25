@@ -22,13 +22,13 @@
 #' 
 #' # Estimate AMS parameters and confidence intervals with 0.99 confidence 
 #' # level
-#' ams.constable(measures, setup, alpha = 0.99)
+#' BootstrapAnalyse(measures, setup, alpha = 0.99)
 #'
 #' # Estimate AMS parameters and confidence intervals with 0.95 confidence 
 #' # level (default) and only 100 bootstrap resamples
-#' ams.constable(measures, setup, R = 100)
+#' BootstrapAnalyse(measures, setup, R = 100)
 #'
-ams.constable <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
+BootstrapAnalyse <- function(measures, setup, alpha=0.95, R=1000, normalize=FALSE){
 
     # cons_eig_para, is a data.frame with the eigenvalues and eigenvectors from the measurements
 

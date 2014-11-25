@@ -31,7 +31,7 @@ Performs simultations of AMS statistics analysis
 # of simulated data
 suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
 
-AMSsimulations(methods = c('ams.hext', 'ams.constable'),
+AMSsimulations(methods = c('HextAnalyse', 'BootstrapAnalyse'),
              suscept.matrix = suscep0,
              nmeasures = 10,
              error.dist = NormalErrorGenerator(0.3),

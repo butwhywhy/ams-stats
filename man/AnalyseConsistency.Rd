@@ -37,13 +37,13 @@ using syntetic data.
 # of simulated data
 suscep0 <- matrix(c(1,0,0, 0,2,0, 0,0,3), nrow = 3)
 
-AnalyseConsistency(methods = c('ams.hext', 'ams.constable'),
+AnalyseConsistency(methods = c('HextAnalyse', 'BootstrapAnalyse'),
                  suscept.matrix = suscep0,
                  nmeasures = 5,
                  error.dist = NormalErrorGenerator(0.3),
                  nrepetitions = 10,
                  setup = AMSsetup(),
-                 R = 100 # additional parameter for ams.constable method`
+                 R = 100 # additional parameter for BootstrapAnalyse method`
                  )
 }
 

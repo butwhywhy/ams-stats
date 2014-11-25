@@ -16,7 +16,7 @@ test_that("Bootstrap method is backwards compatible", {
                   # Bootstrap analysis
                   set.seed(1000001)
                   boot_analysis_name <- paste('constable', i, '_', j, sep = '')
-                  boot_analysis <- ams.constable(measures, setup, 
+                  boot_analysis <- BootstrapAnalyse(measures, setup, 
                                                  alpha = alpha, R = R)
                   expect_that(boot_analysis, equals(get(boot_analysis_name)))
 

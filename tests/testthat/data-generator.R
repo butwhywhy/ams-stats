@@ -32,21 +32,21 @@ for (i in 1:3) {
         # Bootstrap analysis
         set.seed(1000001)
         boot_analysis_name <- paste('constable', i, '_', j, sep = '')
-        boot_analysis <- ams.constable(measures, setup, 
+        boot_analysis <- BootstrapAnalyse(measures, setup, 
                                       alpha = alpha, R = R)
         assign(boot_analysis_name, boot_analysis)
 
         # Hext without N analysis
         set.seed(1000001)
         hextwon_analysis_name <- paste('hextwon', i, '_', j, sep = '')
-        hextwon_analysis <- ams.hext(measures, setup, alpha = alpha, 
+        hextwon_analysis <- HextAnalyse(measures, setup, alpha = alpha, 
                                      withoutN = TRUE)
         assign(hextwon_analysis_name, hextwon_analysis)
 
         # Hext analysis
         set.seed(1000001)
         hext_analysis_name <- paste('hext', i, '_', j, sep = '')
-        hext_analysis <- ams.hext(measures, setup, alpha = alpha)
+        hext_analysis <- HextAnalyse(measures, setup, alpha = alpha)
         assign(hext_analysis_name, hext_analysis)
 
         objects_to_save <- append(objects_to_save, 
