@@ -1,5 +1,5 @@
 
-#' Analyse AMS data using Bootstrap method proposed by Hext.
+#' Analyse AMS data using Bootstrap method proposed by Constable and Tauxe
 #'
 #' This function takes a \code{AMSmeasures} object and returns the estimated 
 #' eigenvalues and their errors and the estimated eigenvectors with 
