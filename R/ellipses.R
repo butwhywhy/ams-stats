@@ -8,44 +8,44 @@
 #' semiangles, called eta and zeta. 'elip$eta' and 'elip$zeta' are the value of 
 #' the two semiangles. All angular magnitudes in radians.
 #'
-#' @param centerDir Numeric vector, representing longitud and latitude of the
+#' @param center.dir Numeric vector, representing longitud and latitude of the
 #'     center of the ellipse
-#' @param axis1Dir Numeric vector, representing longitud and latitude of the
+#' @param axis1.dir Numeric vector, representing longitud and latitude of the
 #'     first semiaxis of the ellipse
-#' @param axis2Dir Numeric vector, representing longitud and latitude of the
+#' @param axis2.dir Numeric vector, representing longitud and latitude of the
 #'     second semiaxis of the ellipse
 #' @param semiangle1 Numberic value, angular magnitud of the first semiaxis
 #' @param semiangle2 Numberic value, angular magnitud of the second semiaxis
 #' @export
 #' @examples
-#' centerDir <- c(0, pi/2)
-#' axis1Dir <- c(pi/2, 0)
-#' axis2Dir <- c(pi/2, pi/2)
-#' ellipse <- SpherEllipse(centerDir, axis1Dir, axis2Dir, 1/2, 1)
+#' center.dir <- c(0, pi/2)
+#' axis1.dir <- c(pi/2, 0)
+#' axis2.dir <- c(pi/2, pi/2)
+#' ellipse <- SpherEllipse(center.dir, axis1.dir, axis2.dir, 1/2, 1)
 #' plot(ellipse)
 #'
 #' @seealso \code{\link{plot.SpherEllipse}}
-SpherEllipse <- function(centerDir, axis1Dir, axis2Dir, semiangle1, semiangle2) {
+SpherEllipse <- function(center.dir, axis1.dir, axis2.dir, semiangle1, semiangle2) {
     if (semiangle1 > semiangle2) {
         eta <- semiangle1
-        edir <- axis1Dir
+        edir <- axis1.dir
         zeta <- semiangle2
-        zdir <- axis2Dir 
+        zdir <- axis2.dir 
     } else {
         eta <- semiangle2
-        edir <- axis2Dir
+        edir <- axis2.dir
         zeta <- semiangle1
-        zdir <- axis1Dir 
+        zdir <- axis1.dir 
     }
-    ellip <- list(center=centerDir, eta=eta, zeta=zeta, edir=edir, zdir=zdir)
+    ellip <- list(center=center.dir, eta=eta, zeta=zeta, edir=edir, zdir=zdir)
     class(ellip) <- c('SpherEllipse', class(ellip))
     return(ellip)
 }
 
-NorthHemisphEllipse <- function(centerDir, axis1Dir, axis2Dir, semiangle1, semiangle2) {
-    return(SpherEllipse(.__toNorth(centerDir),
-                            .__toNorth(axis1Dir),
-                            .__toNorth(axis2Dir),
+NorthHemisphEllipse <- function(center.dir, axis1.dir, axis2.dir, semiangle1, semiangle2) {
+    return(SpherEllipse(.__toNorth(center.dir),
+                            .__toNorth(axis1.dir),
+                            .__toNorth(axis2.dir),
                             semiangle1,
                             semiangle2))
 }

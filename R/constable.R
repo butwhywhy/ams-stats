@@ -213,7 +213,7 @@ kent_parameters <- function(nvectors, ref_vector, n=1, alpha) {
     zdir = car2sph(gamma_mat[1,2], gamma_mat[2,2], gamma_mat[3,2])
 
     #return(list(eta=eta, zeta=zeta, edir=edir, zdir=zdir, center=car2sph(t(mean_vec))))
-    return(NorthHemisphEllipse(centerDir=car2sph(t(mean_vec)), axis1Dir=edir, axis2Dir=zdir, semiangle1=eta, semiangle2=zeta))
+    return(NorthHemisphEllipse(center.dir=car2sph(t(mean_vec)), axis1.dir=edir, axis2.dir=zdir, semiangle1=eta, semiangle2=zeta))
 }
 
 .__closest_vect <- function(vects, ref) {

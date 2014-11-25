@@ -4,7 +4,7 @@
 \title{Plot in lambert coordinates}
 \usage{
 lambert.plot(long, lat, radial.labels = c(90, 60, 30, 0), add = F,
-  rp.type = "s", divideHemispheres = T, ...)
+  rp.type = "s", divide.hemispheres = T, ...)
 }
 \arguments{
 \item{long}{Numeric vector of longitud coordinates in radians}
@@ -20,7 +20,7 @@ removing objectx previously in the plot, default is False}
 \item{rp.type}{Like in \code{\link{polar.plot}}, default is 's'
 (symbol)}
 
-\item{divideHemispheres}{Boolean value indicating if the plot should be
+\item{divide.hemispheres}{Boolean value indicating if the plot should be
 divided into blocks of points lying in the same hemisphere, so that
 points in different hemisphere are not joined. Default is True}
 

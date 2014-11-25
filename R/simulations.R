@@ -1,5 +1,3 @@
-#source('utils.R')
-#source('ams.R')
 
 #' Generates a synthetic AMS measurements object
 #'

@@ -1,5 +1,3 @@
-#source('ams.R')
-#source('coordinates.R')
 
 jelinek_eigen_param <- function(frame) {
 

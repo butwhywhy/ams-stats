@@ -102,19 +102,19 @@ lambert_NorthProlongation <- function(rho,long) {
 #'     removing objectx previously in the plot, default is False
 #' @param rp.type Like in \code{\link{polar.plot}}, default is 's' 
 #'     (symbol)
-#' @param divideHemispheres Boolean value indicating if the plot should be
+#' @param divide.hemispheres Boolean value indicating if the plot should be
 #'     divided into blocks of points lying in the same hemisphere, so that
 #'     points in different hemisphere are not joined. Default is True
 #' @param ... Extra parameters to be passed to \code{\link{polar.plot}}
 #'
 #' @export
-lambert.plot <- function(long,lat,radial.labels=c(90,60,30,0),add=F,rp.type='s',divideHemispheres=T,...) {
+lambert.plot <- function(long,lat,radial.labels=c(90,60,30,0),add=F,rp.type='s',divide.hemispheres=T,...) {
     #library(plotrix)
     rad_lim <- .__lat2rho(radial.labels*pi/180)
 
     lam_vec <- spher2lambert(long,lat)
 
-    if (divideHemispheres) {
+    if (divide.hemispheres) {
         lam_vec_divided <- .__lambert_divide_hemisphere(lam_vec[,1], lam_vec[,2])
         first <- T
         for (block in lam_vec_divided) {
